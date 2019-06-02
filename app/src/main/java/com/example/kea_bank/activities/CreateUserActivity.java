@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.kea_bank.R;
 import com.example.kea_bank.domain.Credentials.Credentials;
@@ -26,7 +27,13 @@ import com.example.kea_bank.domain.users.User;
 import com.example.kea_bank.services.UserService;
 import com.example.kea_bank.utilities.EmailValidator;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class CreateUserActivity extends AppCompatActivity {
 
@@ -64,14 +71,27 @@ public class CreateUserActivity extends AppCompatActivity {
 
 
 
-    public void onClick(View view){
+    public void onClick(View view) throws ParseException {
 
         Log.d(TAG, getResources().getString(R.string.onClick));
+
         String userEmail = email.getText().toString();
         String userPassword = password.getText().toString();
         String userPassword2 = retypePassword.getText().toString();
 
-        setUserFields(userEmail, userPassword);
+        // Sets all the fields of the user. 2/5 accounts are activated, rest are disabled //
+        String someDate = mDisplayDate.getText().toString();
+        someDate = someDate.replace("/", "-");
+
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
+        Date formattedDate = simpleDateFormat.parse(someDate);
+
+
+        int userAge = userService.calculateUserAge(formattedDate);
+        userService.setFields(user, userEmail, userPassword, userAge);
+
+        Log.d(TAG, String.valueOf(user.getKeys()));
 
         // Check if input fields are empty //
         if (email.getText().toString().trim().isEmpty()){
@@ -79,6 +99,11 @@ public class CreateUserActivity extends AppCompatActivity {
         }
         if (password.getText().toString().trim().isEmpty()) {
             password.setError(getResources().getString(R.string.fill_out_field));
+
+        if (userAge < 18){
+            mDisplayDate.setError("Must be 18 years old.");
+            //Toast.makeText(this, "Invalid Age. Must be 18 years or older.", Toast.LENGTH_SHORT).show();
+        }
 
         // If the input fields are fine, we check if the user exists //
         } else {
@@ -108,20 +133,12 @@ public class CreateUserActivity extends AppCompatActivity {
                 setResult(RESULT_OK, resultIntent);
 
 
+
                 // Destroy activity and free it from memory, takes us back to MainActivity //
                 finish();
             }
         }
 
-    }
-
-    protected void setUserFields(String userEmail, String userPassword){
-        user.setCredentials(new Credentials(userEmail, userPassword));
-        user.setDefaultAccount(new DefaultAccount(0.0));
-        user.setBudgetAccount(new BudgetAccount(0.0));
-        user.setBusinessAccount(new BusinessAccount(0.0));
-        user.setPensionAccount(new PensionAccount(0.0));
-        user.setSavingsAccount(new SavingsAccount(0.0));
     }
 
     protected void init(){
@@ -143,10 +160,10 @@ public class CreateUserActivity extends AppCompatActivity {
 
                 DatePickerDialog dialog = new DatePickerDialog(
                         CreateUserActivity.this,
-                        android.R.style.Widget_DeviceDefault_Light_ActionBar_Solid,
+                        android.R.style.Theme_Dialog,
                         mDateSetListener,
                         year,month,day);
-                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.LTGRAY));
                 dialog.show();
             }
         });
@@ -157,9 +174,10 @@ public class CreateUserActivity extends AppCompatActivity {
                 month = month + 1;
                 Log.d(TAG, "onDateSet: mm/dd/yyy: " + day + "/" + month + "/" + year);
 
-                String date = month + "/" + day + "/" + year;
+                String date = String.valueOf(month) + "/" + String.valueOf(day) + "/" + String.valueOf(year);
                 mDisplayDate.setText(date);
             }
         };
+
     }
 }

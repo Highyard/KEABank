@@ -9,9 +9,13 @@ public class BudgetAccount extends Account {
         this.activated = true;
     }
 
+    @Override
+    public void increment(User userAccount) {
+
+    }
 
     @Override
-    public void increment(User sender, User receiver) {
+    public void send(User sender, User receiver, Double amount) {
 
     }
 }

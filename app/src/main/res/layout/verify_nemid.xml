@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_soft_beige">
+
+    <TextView
+        android:id="@+id/keyText"
+        android:layout_width="143dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="80dp"
+        android:layout_marginLeft="80dp"
+        android:layout_marginTop="16dp"
+        android:textAlignment="center"
+        android:textColor="@color/color_soft_blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/nemIdInput"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="48dp"
+        android:layout_marginLeft="48dp"
+        android:layout_marginTop="8dp"
+        android:ems="10"
+        android:hint="@string/enter_key"
+        android:inputType="textPersonName"
+        android:textAlignment="center"
+        android:textColor="@color/color_soft_blue"
+        android:textColorHighlight="@color/color_soft_blue"
+        android:textColorHint="@color/color_soft_blue"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/keyText" />
+
+</android.support.constraint.ConstraintLayout>

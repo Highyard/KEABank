@@ -14,11 +14,12 @@ public class LoginHandlerService {
 
     private Context context;
 
+    private UserRepository userRepository = new UserRepository();
+
     public LoginHandlerService(Context context){
         this.context = context;
     }
 
-    private UserRepository userRepository = new UserRepository();
 
     public boolean handleLogin(Context context, SharedPreferences sharedPreferences, String userName, String password){
         Log.d(TAG, context.getResources().getString(R.string.handle_login));

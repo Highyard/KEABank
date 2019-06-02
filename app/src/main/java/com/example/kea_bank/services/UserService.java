@@ -5,8 +5,21 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.kea_bank.R;
+import com.example.kea_bank.domain.Credentials.Credentials;
+import com.example.kea_bank.domain.accounts.BudgetAccount;
+import com.example.kea_bank.domain.accounts.BusinessAccount;
+import com.example.kea_bank.domain.accounts.DefaultAccount;
+import com.example.kea_bank.domain.accounts.PensionAccount;
+import com.example.kea_bank.domain.accounts.SavingsAccount;
 import com.example.kea_bank.domain.users.User;
 import com.example.kea_bank.repositories.UserRepository;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.Calendar;
+import java.util.Date;
 
 public class UserService {
 
@@ -49,6 +62,30 @@ public class UserService {
         Log.d(TAG, context.getResources().getString(R.string.user_exists));
         //Log.d(TAG, "Name of contains: " + userRepository.fetchUser(userId).getCredentials().getName());
         return userRepository.fetchUser(userId).getCredentials().getName().contains(userId);
+    }
+
+    public void setFields(User user, String email, String password, int age) {
+        Credentials credentials = new Credentials(email, password);
+        user.setAge(age);
+        user.setCredentials(credentials);
+        user.setDefaultAccount(new DefaultAccount(0.0));
+        user.setBudgetAccount(new BudgetAccount(0.0));
+        user.setBusinessAccount(new BusinessAccount(0.0));
+        user.setPensionAccount(new PensionAccount(0.0));
+        user.setSavingsAccount(new SavingsAccount(0.0));
+    }
+
+    public int calculateUserAge(Date birthDate){
+        Date currentDate = new Date();
+
+        DateFormat formatter = new SimpleDateFormat("yyyyMMdd");
+        int date1 = Integer.parseInt(formatter.format(birthDate));
+        int date2 = Integer.parseInt(formatter.format(currentDate));
+        return (date2 - date1) / 10000;
+    }
+
+    public boolean verifyKeyMatch(){
+        return true;
     }
 
 }

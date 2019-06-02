@@ -32,8 +32,9 @@ public abstract class Account implements Interest{
         this.userId = userId;
     }
 
-    void move(User sender, User receiver){
+    void move(User sender, User receiver, Double amount) {
 
-     }
+    }
+
 
 }

@@ -9,6 +9,10 @@ import com.example.kea_bank.domain.accounts.BusinessAccount;
 import com.example.kea_bank.domain.accounts.DefaultAccount;
 import com.example.kea_bank.domain.accounts.PensionAccount;
 import com.example.kea_bank.domain.accounts.SavingsAccount;
+import com.example.kea_bank.utilities.KeyGenerator;
+
+import java.util.ArrayList;
+
 
 public class User implements Parcelable {
 
@@ -20,6 +24,7 @@ public class User implements Parcelable {
     private BusinessAccount businessAccount = null;
     private PensionAccount pensionAccount   = null;
     private SavingsAccount savingsAccount   = null;
+    private ArrayList<String> keys          = KeyGenerator.keyArray();
 
     public User() {
     }
@@ -138,6 +143,11 @@ public class User implements Parcelable {
         this.savingsAccount = savingsAccount;
     }
 
+    public ArrayList<String> getKeys() {
+        return keys;
+    }
 
-
+    public void setKeys(ArrayList<String> keys) {
+        this.keys = keys;
+    }
 }

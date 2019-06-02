@@ -8,7 +8,7 @@ public class KeyGenerator {
     private static final String ALPHA_NUMERIC_STRING = "0123456789";
     private static ArrayList<String> credArray = new ArrayList<>();
     private static final int keyLength = 3;
-    private static final int keySize = 50;
+    public static final int keySize = 50;
 
     private static String randomAlphaNumeric(int count) {
 
@@ -24,7 +24,7 @@ public class KeyGenerator {
     }
 
 
-    public static ArrayList keyArray() {
+    public static ArrayList<String> keyArray() {
         for (int i = 0; i < keySize; i++) {
             credArray.add(KeyGenerator.randomAlphaNumeric(keyLength)+ ":" + KeyGenerator.randomAlphaNumeric(keyLength));
         }

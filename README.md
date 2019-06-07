@@ -14,4 +14,4 @@ logic, if any is required. The services call a Repository layer when fetching of
 * The app validates the user's inputs, firstly by doing the normal checks, like checking for invalid email, or password mismatch. Once these
 checks are passed, it prompts the user for a NemID validation to be able to sign in(the corresponding key is logged, check MainActivity logcat for key). Other validation  includes sending money between accounts,
 ones own or otherwise.
-* The app uses google maps, to get the current location of the user, and assign their branch on sign-up.
+* The app uses the LocationManager and LocationListener classes to get the current location of the user, and assign their branch on sign-up.

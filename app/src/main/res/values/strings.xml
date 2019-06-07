@@ -42,4 +42,15 @@
     <string name="on_activity_result">onActivityResult() called</string>
     <string name="caps_cancel">CANCEL</string>
     <string name="caps_login">LOGIN</string>
+    <string name="must_be_18">Must be 18 years old.</string>
+    <string name="invalid_key">Invalid Key Entered. Try again.</string>
+    <string name="business_news_feed">Business News Feed</string>
+    <string name="loading_rss">Loading rss feed...</string>
+    <string name="existing_user">EXISTING_USER</string>
+    <string name="default_account">Default Account:</string>
+    <string name="budget_account">Budget Account:</string>
+    <string name="business_account">Business Account:</string>
+    <string name="pension_account">Pension Account:</string>
+    <string name="savings_account">Savings Account:</string>
+    <string name="balance">Balance:</string>
 </resources>

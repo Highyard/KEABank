@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
     <color name="color_soft_blue">#74a4ff</color>
-    <color name="color_soft_beige">#EDF3FF</color>
+    <color name="color_soft_beige">#7FB3B0</color>
+    <!--EDF3FF-->
 </resources>

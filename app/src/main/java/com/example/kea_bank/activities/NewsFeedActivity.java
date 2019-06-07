@@ -77,7 +77,7 @@ public class NewsFeedActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog.setMessage("Busy loading rss feed...please wait...");
+            progressDialog.setMessage(getResources().getString(R.string.loading_rss));
             progressDialog.show();
         }
 
@@ -101,14 +101,8 @@ public class NewsFeedActivity extends AppCompatActivity {
                 // We will get the XML from an input stream
                 xpp.setInput(getInputStream(url), "UTF_8");
 
-                /* We will parse the XML content looking for the "<title>" tag which appears inside the "<item>" tag.
-                 * We should take into consideration that the rss feed name is also enclosed in a "<title>" tag.
-                 * Every feed begins with these lines: "<channel><title>Feed_Name</title> etc."
-                 * We should skip the "<title>" tag which is a child of "<channel>" tag,
-                 * and take into consideration only the "<title>" tag which is a child of the "<item>" tag
-                 *
-                 * In order to achieve this, we will make use of a boolean variable called "insideItem".
-                 */
+                // We will use a boolean to determine whether we are inside the correct tag or not. In this case
+                // the tag is <item>
                 boolean insideItem = false;
 
                 // Returns the type of current event: START_TAG, END_TAG, START_DOCUMENT, END_DOCUMENT etc..
@@ -146,7 +140,8 @@ public class NewsFeedActivity extends AppCompatActivity {
 
                         insideItem = false;
                     }
-                    eventType = xpp.next(); //move to next element
+                    //move to next element
+                    eventType = xpp.next();
                 }
 
 

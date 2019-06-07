@@ -1,11 +1,20 @@
 package com.example.kea_bank.activities;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +33,7 @@ import com.example.kea_bank.domain.accounts.DefaultAccount;
 import com.example.kea_bank.domain.accounts.PensionAccount;
 import com.example.kea_bank.domain.accounts.SavingsAccount;
 import com.example.kea_bank.domain.users.User;
+import com.example.kea_bank.services.LatLongService;
 import com.example.kea_bank.services.UserService;
 import com.example.kea_bank.utilities.EmailValidator;
 
@@ -38,6 +48,10 @@ import java.util.Locale;
 public class CreateUserActivity extends AppCompatActivity {
 
     private static final String TAG = "CreateUserActivity";
+
+    private final int uniqueRequestCode = 88;
+    private BroadcastReceiver broadcastReceiver;
+
 
     EditText email, password, retypePassword;
     Button sign_up;
@@ -62,13 +76,14 @@ public class CreateUserActivity extends AppCompatActivity {
         datePickerInit();
 
         // Initialize non-views //
-        context = getApplicationContext();
-        sharedPreferencesCredentials = context.getSharedPreferences(getResources().getString(R.string.CREDENTIALS_KEY), MODE_PRIVATE);
-        sharedPreferencesUserAccount = context.getSharedPreferences("USERACCOUNTS", MODE_PRIVATE);
-        userService = new UserService(context, sharedPreferencesCredentials);
+        initNonViews();
+
+        if (!checkForPermissions()){
+            getUserLocation();
+        }
+
 
     }
-
 
 
     public void onClick(View view) throws ParseException {
@@ -80,39 +95,30 @@ public class CreateUserActivity extends AppCompatActivity {
         String userPassword2 = retypePassword.getText().toString();
 
         // Sets all the fields of the user. 2/5 accounts are activated, rest are disabled //
-        String someDate = mDisplayDate.getText().toString();
-        someDate = someDate.replace("/", "-");
+        String unformattedUserBirthdate = mDisplayDate.getText().toString();
 
-
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
-        Date formattedDate = simpleDateFormat.parse(someDate);
-
-
-        int userAge = userService.calculateUserAge(formattedDate);
+        int userAge = userService.calculateUserAge(unformattedUserBirthdate);
         userService.setFields(user, userEmail, userPassword, userAge);
 
-        Log.d(TAG, String.valueOf(user.getKeys()));
-
         // Check if input fields are empty //
-        if (email.getText().toString().trim().isEmpty()){
+        if (email.getText().toString().trim().isEmpty()) {
             email.setError(getResources().getString(R.string.fill_out_field));
         }
         if (password.getText().toString().trim().isEmpty()) {
             password.setError(getResources().getString(R.string.fill_out_field));
-
-        if (userAge < 18){
-            mDisplayDate.setError("Must be 18 years old.");
-            //Toast.makeText(this, "Invalid Age. Must be 18 years or older.", Toast.LENGTH_SHORT).show();
+        }
+        if (userAge < 18) {
+            mDisplayDate.setError(getResources().getString(R.string.must_be_18));
         }
 
         // If the input fields are fine, we check if the user exists //
-        } else {
+        else {
             if (userService.userExists(userEmail)) {
                 Log.d(TAG, String.valueOf(userService.userExists(userEmail)));
                 email.setError(getResources().getString(R.string.user_exists_msg));
             }
             // Regex check if email follows email format convention //
-            else if(!EmailValidator.validate(userEmail)){
+            else if (!EmailValidator.validate(userEmail)) {
                 email.setError(getResources().getString(R.string.invalid_email));
             }
 
@@ -123,7 +129,7 @@ public class CreateUserActivity extends AppCompatActivity {
             }
 
             // If all goes well, we save the user, set our result for the ActivityOnResult method and destroy the activity //
-            else{
+            else {
                 userService.saveUser(CreateUserActivity.this, sharedPreferencesCredentials, user);
                 userService.setSharedPreferences(sharedPreferencesUserAccount);
                 userService.saveUser(context, sharedPreferencesUserAccount, user);
@@ -131,7 +137,6 @@ public class CreateUserActivity extends AppCompatActivity {
                 Intent resultIntent = new Intent();
                 resultIntent.putExtra(getResources().getString(R.string.NEW_USER_KEY), user);
                 setResult(RESULT_OK, resultIntent);
-
 
 
                 // Destroy activity and free it from memory, takes us back to MainActivity //
@@ -147,6 +152,13 @@ public class CreateUserActivity extends AppCompatActivity {
         retypePassword = findViewById(R.id.retypepassword);
         sign_up = findViewById(R.id.sign_up);
         mDisplayDate = findViewById(R.id.date);
+    }
+
+    protected void initNonViews(){
+        context = getApplicationContext();
+        sharedPreferencesCredentials = context.getSharedPreferences(getResources().getString(R.string.CREDENTIALS_KEY), MODE_PRIVATE);
+        sharedPreferencesUserAccount = context.getSharedPreferences("USERACCOUNTS", MODE_PRIVATE);
+        userService = new UserService(context, sharedPreferencesCredentials);
     }
 
     protected void datePickerInit(){
@@ -174,10 +186,73 @@ public class CreateUserActivity extends AppCompatActivity {
                 month = month + 1;
                 Log.d(TAG, "onDateSet: mm/dd/yyy: " + day + "/" + month + "/" + year);
 
-                String date = String.valueOf(month) + "/" + String.valueOf(day) + "/" + String.valueOf(year);
+                String date = month + "/" + day + "/" + year;
                 mDisplayDate.setText(date);
             }
         };
 
+    }
+
+    protected void getUserLocation(){
+        Intent startService = new Intent(CreateUserActivity.this, LatLongService.class);
+        startService(startService);
+    }
+
+    protected boolean checkForPermissions(){
+        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED){
+
+            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, uniqueRequestCode);
+            return true;
+        }
+        return false;
+    }
+
+//    protected String compareLocation(Location location){
+//
+//
+//
+//    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == uniqueRequestCode){
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
+                getUserLocation();
+            } else {
+                checkForPermissions();
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (broadcastReceiver == null){
+            broadcastReceiver = new BroadcastReceiver() {
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    double[] coords = intent.getDoubleArrayExtra("coordinates");
+                    Log.d(TAG, "THESE ARE MY COORDINATES: " + coords[0] + " " + coords[1]);
+                    Location location = new Location("");
+                    location.setLatitude(coords[0]);
+                    location.setLongitude(coords[1]);
+                    user.setBranch(LatLongService.compareLocations(location));
+                }
+            };
+        }
+        registerReceiver(broadcastReceiver, new IntentFilter("current_location"));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (broadcastReceiver != null){
+            unregisterReceiver(broadcastReceiver);
+        }
     }
 }

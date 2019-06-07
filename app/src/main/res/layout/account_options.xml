@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_soft_beige">
+
+    <TextView
+        android:id="@+id/tvSpecificAccount"
+        android:layout_width="171dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="TextView"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/payBills"
+        android:layout_width="111dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="136dp"
+        android:background="@drawable/rounded_corner"
+        android:text="Pay Bills"
+        app:layout_constraintStart_toEndOf="@+id/depositMoney"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/depositMoney"
+        android:layout_width="111dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/rounded_corner"
+        android:text="Deposit Money"
+        app:layout_constraintStart_toEndOf="@+id/sendMoney"
+        app:layout_constraintTop_toBottomOf="@+id/tvBalance" />
+
+    <Button
+        android:id="@+id/sendMoney"
+        android:layout_width="111dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/rounded_corner"
+        android:text="Send Money"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvBalance" />
+
+    <TextView
+        android:id="@+id/tvBalance"
+        android:layout_width="171dp"
+        android:layout_height="37dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="14dp"
+        android:text="TextView"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSpecificAccount" />
+
+</android.support.constraint.ConstraintLayout>

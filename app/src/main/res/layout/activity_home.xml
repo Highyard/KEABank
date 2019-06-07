@@ -8,6 +8,7 @@
     android:fillViewport="true"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <android.support.constraint.ConstraintLayout
+        android:background="@color/color_soft_beige"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".activities.HomeActivity">
@@ -15,15 +16,51 @@
 
         <Button
             android:id="@+id/newsFeedButton"
-            android:layout_width="wrap_content"
+            android:layout_width="120dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="137dp"
-            android:layout_marginLeft="137dp"
-            android:layout_marginTop="123dp"
-            android:text="News Feed"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="44dp"
+            android:background="@drawable/rounded_corner"
             android:onClick="onClick"
+            android:text="@string/business_news_feed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/myAccounts" />
+
+        <Button
+            android:id="@+id/myAccounts"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            android:layout_marginTop="56dp"
+            android:background="@drawable/rounded_corner"
+            android:onClick="onClick"
+            android:text="My Accounts"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/applyAccounts"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="56dp"
+            android:background="@drawable/rounded_corner"
+            android:onClick="onClick"
+            android:text="Apply for new account"
+            app:layout_constraintStart_toEndOf="@+id/myAccounts"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/bills"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="44dp"
+            android:background="@drawable/rounded_corner"
+            android:onClick="onClick"
+            android:text="Bills"
+            app:layout_constraintStart_toEndOf="@+id/newsFeedButton"
+            app:layout_constraintTop_toBottomOf="@+id/applyAccounts" />
     </android.support.constraint.ConstraintLayout>
 
 </ScrollView>

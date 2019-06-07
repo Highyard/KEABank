@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.example.kea_bank.R;
 import com.example.kea_bank.domain.Credentials.Credentials;
+import com.example.kea_bank.domain.accounts.Account;
 import com.example.kea_bank.domain.accounts.BudgetAccount;
 import com.example.kea_bank.domain.accounts.BusinessAccount;
 import com.example.kea_bank.domain.accounts.DefaultAccount;
@@ -13,13 +14,18 @@ import com.example.kea_bank.domain.accounts.PensionAccount;
 import com.example.kea_bank.domain.accounts.SavingsAccount;
 import com.example.kea_bank.domain.users.User;
 import com.example.kea_bank.repositories.UserRepository;
+import com.example.kea_bank.utilities.KeyGenerator;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+import java.util.Random;
 
 public class UserService {
 
@@ -68,24 +74,55 @@ public class UserService {
         Credentials credentials = new Credentials(email, password);
         user.setAge(age);
         user.setCredentials(credentials);
-        user.setDefaultAccount(new DefaultAccount(0.0));
-        user.setBudgetAccount(new BudgetAccount(0.0));
-        user.setBusinessAccount(new BusinessAccount(0.0));
-        user.setPensionAccount(new PensionAccount(0.0));
-        user.setSavingsAccount(new SavingsAccount(0.0));
+        DefaultAccount defaultAccount = new DefaultAccount(1000000.0);
+        BudgetAccount budgetAccount = new BudgetAccount(0.0);
+        BusinessAccount businessAccount = new BusinessAccount(0.0);
+        PensionAccount pensionAccount = new PensionAccount(0.0);
+        SavingsAccount savingsAccount = new SavingsAccount(0.0);
+        user.setDefaultAccount(defaultAccount);
+        user.setBudgetAccount(budgetAccount);
+        user.setBusinessAccount(businessAccount);
+        user.setPensionAccount(pensionAccount);
+        user.setSavingsAccount(savingsAccount);
     }
 
-    public int calculateUserAge(Date birthDate){
+    public int calculateUserAge(String unformattedBirthdate) {
         Date currentDate = new Date();
-
         DateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-        int date1 = Integer.parseInt(formatter.format(birthDate));
-        int date2 = Integer.parseInt(formatter.format(currentDate));
-        return (date2 - date1) / 10000;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
+
+        try {
+            unformattedBirthdate = unformattedBirthdate.replace("/", "-");
+            Date formattedDate = simpleDateFormat.parse(unformattedBirthdate);
+            int date1 = Integer.parseInt(formatter.format(formattedDate));
+            int date2 = Integer.parseInt(formatter.format(currentDate));
+            return (date2 - date1) / 10000;
+        } catch (ParseException e) {
+            Log.e(TAG, "calculateUserAge: " + e.getMessage());
+        }
+        return 0;
     }
 
-    public boolean verifyKeyMatch(){
-        return true;
+    public boolean verifyKeyMatch(String[] keyArray, String input){
+        String correctKey = keyArray[1];
+        return input.equalsIgnoreCase(correctKey);
     }
 
+    public ArrayList<Account> fetchUserAccounts(User user){
+        ArrayList<Account> initialArrayList = new ArrayList<>();
+        Log.d(TAG, "THIS IS USERSERVICE" + user.getDefaultAccount());
+        initialArrayList.add(user.getBudgetAccount());
+        initialArrayList.add(user.getBusinessAccount());
+        initialArrayList.add(user.getDefaultAccount());
+        initialArrayList.add(user.getPensionAccount());
+        initialArrayList.add(user.getSavingsAccount());
+
+        ArrayList<Account> finalArrayList = new ArrayList<>();
+        for (Account account: initialArrayList) {
+            if (account.isActivated())
+                finalArrayList.add(account);
+        }
+
+        return finalArrayList;
+    }
 }

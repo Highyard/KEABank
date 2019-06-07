@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_soft_beige"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvSpecificAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="23dp"
+        android:text="@string/default_account"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvBalance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="23dp"
+        android:text="balance"
+        android:textSize="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvSpecificAccount" />
+
+    <Button
+        android:id="@+id/sendMoney"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="23dp"
+        android:background="@drawable/rounded_corner"
+        android:onClick="onClick"
+        android:text="Send Money"
+        app:layout_constraintStart_toStartOf="@id/tvBalance"
+        app:layout_constraintTop_toBottomOf="@id/depositMoney" />
+
+    <Button
+        android:id="@+id/depositMoney"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="23dp"
+        android:background="@drawable/rounded_corner"
+        android:onClick="onClick"
+        android:text="Deposit Money"
+        app:layout_constraintStart_toEndOf="@+id/sendMoney"
+        app:layout_constraintTop_toBottomOf="@id/payBills" />
+
+    <Button
+        android:id="@+id/payBills"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="23dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="23dp"
+        android:background="@drawable/rounded_corner"
+        android:onClick="onClick"
+        android:text="Pay Bills"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/sendMoney" />
+
+</LinearLayout>

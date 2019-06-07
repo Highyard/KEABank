@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity {
     EditText email, password, nemIdInput;
     TextView key;
 
+    User user;
+
     Context context;
     SharedPreferences sharedPreferences;
     UserService userService;
@@ -56,15 +58,11 @@ public class MainActivity extends AppCompatActivity {
 
         // Initialize views //
         init();
+        // Initialize non-views //
+        initNonViews();
 
         //NemIDDialogInflater dialog = new NemIDDialogInflater();
 
-
-        // Initialize non-views //
-        context = getApplicationContext();
-        sharedPreferences = context.getSharedPreferences(getResources().getString(R.string.CREDENTIALS_KEY), MODE_PRIVATE);
-        userService = new UserService(context, sharedPreferences);
-        loginHandlerService = new LoginHandlerService(context);
 
     }
 
@@ -84,7 +82,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void dialogInflater(final Intent intent) {
+    protected void initNonViews(){
+        context = getApplicationContext();
+        sharedPreferences = context.getSharedPreferences(getResources().getString(R.string.CREDENTIALS_KEY), MODE_PRIVATE);
+        userService = new UserService(context, sharedPreferences);
+        loginHandlerService = new LoginHandlerService(context);
+
+    }
+
+    public void dialogInflater(final Intent intent, final User user) {
         Log.d(TAG, getResources().getString(R.string.dialog_inflater));
         final Random random = new Random();
         final int randomIndex = random.nextInt(KeyGenerator.keySize);
@@ -102,22 +108,27 @@ public class MainActivity extends AppCompatActivity {
             nemIdDialog.setView(layout);
             nemIdDialog.setIcon(R.mipmap.nemid_layer);
 
-            String[] keyArray = userService.fetchUser(email.getText().toString()).getKeys().get(randomIndex).split(":");
-            Log.d(TAG, "This is the split keyArray: " + Arrays.toString(keyArray));
 
+            final String[] keyArray = userService.fetchUser(email.getText().toString()).getKeys().get(randomIndex).split(":");
+            Log.d(TAG, "This is the fetched key pair: " + Arrays.toString(keyArray));
+
+            // Display the first half of key to user
             key.setText(keyArray[0]);
             Log.d(TAG, "This is the first  index: " + keyArray[0]);
-
-            final String correctKeyMatch = keyArray[1];
             Log.d(TAG, "This is the second index: " + keyArray[1]);
 
             nemIdDialog.setPositiveButton(getResources().getString(R.string.dialog_login), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if (nemIdInput.getText().toString().trim().equalsIgnoreCase(correctKeyMatch)) {
+                    // Verify if user typed in the correct key
+                    if (userService.verifyKeyMatch(keyArray, nemIdInput.getText().toString().trim())) {
+                        intent.putExtra(getResources().getString(R.string.existing_user), user);
                         startActivity(intent);
+
                     } else {
-                        Toast.makeText(MainActivity.this, "Invalid Key Entered.\nTry again.", Toast.LENGTH_SHORT).show();
+                        // If he did not, then the password is cleared, and a toast is displayed
+                        Toast.makeText(MainActivity.this, getResources().getString(R.string.invalid_key), Toast.LENGTH_SHORT).show();
+                        password.setText("");
                     }
                 }
             });
@@ -127,6 +138,8 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                 }
             });
+
+            //Show the dialog
             nemIdDialog.show();
 
         } catch (IllegalStateException e) {
@@ -141,6 +154,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.log_in:
                 Log.d(TAG, getResources().getString(R.string.login_clicked_btn));
                 if (userService.userExists(email.getText().toString())){
+                    User user = userService.fetchUser(email.getText().toString().trim());
                     final Intent loginIntent = new Intent(MainActivity.this, HomeActivity.class);
 
                     if (loginHandlerService.handleLogin(
@@ -150,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                             password.getText().toString()))
                     {
 
-                        dialogInflater(loginIntent);
+                        dialogInflater(loginIntent, user);
 
                         //NemIDDialogInflater dialog = new NemIDDialogInflater();
                         //dialog.show(getSupportFragmentManager(), "SomeName");
@@ -185,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
             if (requestCode == USER_SUCCESS){
 
                 if (resultCode == RESULT_OK) {
-                    User user = data.getParcelableExtra("NEW_USER");
+                    user = data.getParcelableExtra("NEW_USER");
                     email.setText(user.getCredentials().getName());
                     password.setText(user.getCredentials().getPassword());
                 }

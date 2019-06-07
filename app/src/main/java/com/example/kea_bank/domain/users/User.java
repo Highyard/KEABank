@@ -19,11 +19,11 @@ public class User implements Parcelable {
     private Integer age                     = null;
     private String branch                   = null;
     private Credentials credentials         = null;
-    private DefaultAccount defaultAccount   = null;
-    private BudgetAccount budgetAccount     = null;
-    private BusinessAccount businessAccount = null;
-    private PensionAccount pensionAccount   = null;
-    private SavingsAccount savingsAccount   = null;
+    private DefaultAccount defaultAccount   = new DefaultAccount(0.0);
+    private BudgetAccount budgetAccount     = new BudgetAccount(0.0);
+    private BusinessAccount businessAccount = new BusinessAccount(0.0);
+    private PensionAccount pensionAccount   = new PensionAccount(0.0);
+    private SavingsAccount savingsAccount   = new SavingsAccount(0.0);
     private ArrayList<String> keys          = KeyGenerator.keyArray();
 
     public User() {
@@ -48,6 +48,12 @@ public class User implements Parcelable {
         }
         branch = in.readString();
         credentials = in.readParcelable(Credentials.class.getClassLoader());
+        defaultAccount = in.readParcelable(DefaultAccount.class.getClassLoader());
+        budgetAccount = in.readParcelable(BudgetAccount.class.getClassLoader());
+        businessAccount = in.readParcelable(BusinessAccount.class.getClassLoader());
+        pensionAccount = in.readParcelable(PensionAccount.class.getClassLoader());
+        savingsAccount = in.readParcelable(SavingsAccount.class.getClassLoader());
+
     }
 
     @Override
@@ -60,6 +66,11 @@ public class User implements Parcelable {
         }
         dest.writeString(branch);
         dest.writeParcelable(credentials, flags);
+        dest.writeParcelable(defaultAccount, flags);
+        dest.writeParcelable(budgetAccount, flags);
+        dest.writeParcelable(businessAccount, flags);
+        dest.writeParcelable(pensionAccount, flags);
+        dest.writeParcelable(savingsAccount, flags);
     }
 
     @Override

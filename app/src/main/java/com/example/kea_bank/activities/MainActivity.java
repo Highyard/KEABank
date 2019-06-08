@@ -25,6 +25,7 @@ import com.example.kea_bank.domain.users.User;
 import com.example.kea_bank.services.LoginHandlerService;
 import com.example.kea_bank.services.UserService;
 import com.example.kea_bank.utilities.KeyGenerator;
+import com.example.kea_bank.utilities.NemIDDialogInflater;
 //import com.example.kea_bank.utilities.NemIDDialogInflater;
 
 import java.util.Arrays;
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     protected void init(){
+        Log.d(TAG, getResources().getString(R.string.init));
         sign_up = findViewById(R.id.sign_up);
         log_in = findViewById(R.id.log_in);
         email = findViewById(R.id.email);
@@ -216,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (NullPointerException e){
             Log.e(TAG, "onActivityResult: The Intent data object came back null: Error ->", e);
+            Toast.makeText(MainActivity.this, "Something went wrong. Try signing up again.", Toast.LENGTH_LONG).show();
         }
 
     }

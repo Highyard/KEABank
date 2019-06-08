@@ -13,8 +13,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.kea_bank.R;
-import com.example.kea_bank.domain.accounts.Account;
-import com.example.kea_bank.domain.accounts.TestAccount;
 import com.example.kea_bank.domain.users.User;
 import com.example.kea_bank.services.UserService;
 
@@ -24,6 +22,7 @@ public class AccountsActivity extends AppCompatActivity {
 
     private final static String TAG = "AccountsActivity";
 
+    // Codes for checking which account was tapped //
     public final static int DEF = 0;
     public final static int BUD = 1;
     public final static int BUSI = 2;
@@ -33,7 +32,7 @@ public class AccountsActivity extends AppCompatActivity {
 
     ListView accounts;
     TextView tvAccounts;
-    ArrayList<Account> accountArray;
+    ArrayList<String> accountArray;
     Context context;
     SharedPreferences sharedPreferences;
     UserService userService;
@@ -49,19 +48,22 @@ public class AccountsActivity extends AppCompatActivity {
         Log.d(TAG, getResources().getString(R.string.on_create));
         init();
         initNonViews();
+
+
         receivedIntent = getIntent();
-        Log.d(TAG, ""+ receivedIntent.getParcelableExtra(getResources().getString(R.string.existing_user)).toString());
         user = receivedIntent.getParcelableExtra(getResources().getString(R.string.existing_user));
-        Log.d(TAG, "" + user.getCredentials().getName());
 
-        accountArray = userService.fetchUserAccounts(user);
-        Log.d(TAG, "onCreate: " + accountArray.toString());
+        // Assigns the account names of the users accounts that are active to ArrayList accountArray. //
+        // These are used to list all the current accounts that are active for logged in user. //
+        // getAccountNames takes an ArrayList as the only argument, which is retrieved from the user object //
+        // with the fetchUserAccounts method //
+        accountArray = userService.getAccountNames(userService.fetchUserAccounts(user));
 
-        ArrayAdapter<Account> adapter = new ArrayAdapter<>(AccountsActivity.this, android.R.layout.simple_list_item_1, accountArray);
+        // Instantiating adapter //
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(AccountsActivity.this, android.R.layout.simple_list_item_1, accountArray);
 
+        // Set adapter to the ListView //
         accounts.setAdapter(adapter);
-
-
 
 
         accounts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -113,11 +115,13 @@ public class AccountsActivity extends AppCompatActivity {
     }
 
     protected void init(){
+        Log.d(TAG, getResources().getString(R.string.init));
         accounts = findViewById(R.id.accountsList);
         tvAccounts = findViewById(R.id.tvAccounts);
     }
 
     protected void initNonViews(){
+        Log.d(TAG, "initNonViews() called");
         context = getApplicationContext();
         sharedPreferences = context.getSharedPreferences(getResources().getString(R.string.CREDENTIALS_KEY), MODE_PRIVATE);
         userService = new UserService(this, sharedPreferences);

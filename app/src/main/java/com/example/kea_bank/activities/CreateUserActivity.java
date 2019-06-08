@@ -86,7 +86,7 @@ public class CreateUserActivity extends AppCompatActivity {
     }
 
 
-    public void onClick(View view) throws ParseException {
+    public void onClick(View view) {
 
         Log.d(TAG, getResources().getString(R.string.onClick));
 
@@ -138,7 +138,9 @@ public class CreateUserActivity extends AppCompatActivity {
                 resultIntent.putExtra(getResources().getString(R.string.NEW_USER_KEY), user);
                 setResult(RESULT_OK, resultIntent);
 
-
+                // Stop the LatLongService class from continuously getting the user's location //
+                Intent stopServiceIntent = new Intent(CreateUserActivity.this, LatLongService.class);
+                stopService(stopServiceIntent);
                 // Destroy activity and free it from memory, takes us back to MainActivity //
                 finish();
             }
@@ -147,6 +149,7 @@ public class CreateUserActivity extends AppCompatActivity {
     }
 
     protected void init(){
+        Log.d(TAG, getResources().getString(R.string.init));
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         retypePassword = findViewById(R.id.retypepassword);
@@ -155,6 +158,7 @@ public class CreateUserActivity extends AppCompatActivity {
     }
 
     protected void initNonViews(){
+        Log.d(TAG, "initNonViews() called");
         context = getApplicationContext();
         sharedPreferencesCredentials = context.getSharedPreferences(getResources().getString(R.string.CREDENTIALS_KEY), MODE_PRIVATE);
         sharedPreferencesUserAccount = context.getSharedPreferences("USERACCOUNTS", MODE_PRIVATE);
@@ -162,6 +166,7 @@ public class CreateUserActivity extends AppCompatActivity {
     }
 
     protected void datePickerInit(){
+        Log.d(TAG, "datePickerInit() called");
         mDisplayDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -194,11 +199,13 @@ public class CreateUserActivity extends AppCompatActivity {
     }
 
     protected void getUserLocation(){
+        Log.d(TAG, "getUserLocation() called");
         Intent startService = new Intent(CreateUserActivity.this, LatLongService.class);
         startService(startService);
     }
 
     protected boolean checkForPermissions(){
+        Log.d(TAG, "checkForPermissions() called");
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED){
@@ -209,15 +216,11 @@ public class CreateUserActivity extends AppCompatActivity {
         return false;
     }
 
-//    protected String compareLocation(Location location){
-//
-//
-//
-//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d(TAG, "onRequestPermissionsResult() called");
         if (requestCode == uniqueRequestCode){
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED){
                 getUserLocation();
@@ -230,6 +233,7 @@ public class CreateUserActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(TAG, "onResume() called");
 
         if (broadcastReceiver == null){
             broadcastReceiver = new BroadcastReceiver() {
@@ -250,6 +254,7 @@ public class CreateUserActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "onDestroy() called");
 
         if (broadcastReceiver != null){
             unregisterReceiver(broadcastReceiver);

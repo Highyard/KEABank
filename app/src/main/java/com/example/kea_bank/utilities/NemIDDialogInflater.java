@@ -46,22 +46,22 @@ import static android.content.ContentValues.TAG;
 //        dCancel = view.findViewById(R.id.dCancel);
 //        dActionOk = view.findViewById(R.id.dActionOk);
 //
+//        dActionOk.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                dOnInputListener.sendInput();
+//
+//
+//                getDialog().dismiss();
+//
+//            }
+//        });
+//
 //        dCancel.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
 //                getDialog().dismiss();
-//            }
-//        });
-//
-//        dActionOk.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String input = nemIdInput.getText().toString();
-//
-//                dOnInputListener.sendInput(new User());
-//
-//                getDialog().dismiss();
-//
 //            }
 //        });
 //

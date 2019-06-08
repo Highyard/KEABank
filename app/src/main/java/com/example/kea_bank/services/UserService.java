@@ -23,7 +23,9 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
@@ -66,11 +68,11 @@ public class UserService {
     public boolean userExists(String userId) throws NullPointerException {
         userRepository.setContext(context, sharedPreferences);
         Log.d(TAG, context.getResources().getString(R.string.user_exists));
-        //Log.d(TAG, "Name of contains: " + userRepository.fetchUser(userId).getCredentials().getName());
         return userRepository.fetchUser(userId).getCredentials().getName().contains(userId);
     }
 
     public void setFields(User user, String email, String password, int age) {
+        Log.d(TAG, "setFields() called");
         Credentials credentials = new Credentials(email, password);
         user.setAge(age);
         user.setCredentials(credentials);
@@ -87,6 +89,7 @@ public class UserService {
     }
 
     public int calculateUserAge(String unformattedBirthdate) {
+        Log.d(TAG, "calculateUserAge() called");
         Date currentDate = new Date();
         DateFormat formatter = new SimpleDateFormat("yyyyMMdd");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd-yyyy", Locale.US);
@@ -100,17 +103,20 @@ public class UserService {
         } catch (ParseException e) {
             Log.e(TAG, "calculateUserAge: " + e.getMessage());
         }
+        // if we somehow reach this point, 0 is returned, alerting the user that they must be 18 years old,
+        // they can then try again
         return 0;
     }
 
     public boolean verifyKeyMatch(String[] keyArray, String input){
+        Log.d(TAG, "verifyKeyMatch() called");
         String correctKey = keyArray[1];
         return input.equalsIgnoreCase(correctKey);
     }
 
     public ArrayList<Account> fetchUserAccounts(User user){
+        Log.d(TAG, "fetchUserAccounts() called");
         ArrayList<Account> initialArrayList = new ArrayList<>();
-        Log.d(TAG, "THIS IS USERSERVICE" + user.getDefaultAccount());
         initialArrayList.add(user.getBudgetAccount());
         initialArrayList.add(user.getBusinessAccount());
         initialArrayList.add(user.getDefaultAccount());
@@ -124,5 +130,15 @@ public class UserService {
         }
 
         return finalArrayList;
+    }
+
+    public ArrayList<String> getAccountNames(ArrayList<Account> accounts){
+        Log.d(TAG, "getAccountNames() called");
+        ArrayList<String> accountNames = new ArrayList<>();
+        for (Account account: accounts) {
+            accountNames.add(account.getClass().getSimpleName());
+        }
+        Collections.reverse(accountNames);
+        return accountNames;
     }
 }

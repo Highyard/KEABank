@@ -11,14 +11,25 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.support.annotation.Nullable;
+import android.util.Log;
+
+import com.example.kea_bank.R;
 
 public class LatLongService extends Service {
+
+    private final static String TAG = "LatLongService";
 
     private static Location CPH = new Location("Copenhagen");
     private static Location ODENSE = new Location("Odense");
 
     private static final String BRANCH_COPENHAGEN = "Copenhagen";
     private static final String BRANCH_ODENSE = "Odense";
+
+    private final static double CPH_LAT = 55.668601;
+    private final static double CPH_LONG = 12.509811;
+    private final static double ODENSE_LAT = 55.370059;
+    private final static double ODENSE_LONG = 10.373912;
+
 
     @Nullable
     @Override
@@ -33,15 +44,17 @@ public class LatLongService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        Log.d(TAG, getResources().getString(R.string.on_create));
 
-        CPH.setLatitude(55.668601);
-        CPH.setLongitude(12.509811);
-        ODENSE.setLatitude(55.370059);
-        ODENSE.setLongitude(10.373912);
+        CPH.setLatitude(CPH_LAT);
+        CPH.setLongitude(CPH_LONG);
+        ODENSE.setLatitude(ODENSE_LAT);
+        ODENSE.setLongitude(ODENSE_LONG);
 
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+                Log.d(TAG, "onLocationChanged() called");
                 Intent broadcastIntent = new Intent("current_location");
                 double[] latlng = {location.getLatitude(), location.getLongitude()};
                 broadcastIntent.putExtra("coordinates", latlng);
@@ -60,6 +73,7 @@ public class LatLongService extends Service {
 
             @Override
             public void onProviderDisabled(String provider) {
+                Log.d(TAG, "onProviderDisabled() called");
                 Intent redirectUser = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                 redirectUser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(redirectUser);
@@ -74,6 +88,7 @@ public class LatLongService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "onDestroy() called");
 
         if (locationManager != null){
             locationManager.removeUpdates(locationListener);
@@ -81,6 +96,7 @@ public class LatLongService extends Service {
     }
 
     public static String compareLocations(Location location){
+        Log.d(TAG, "compareLocations() called");
         float distance = CPH.distanceTo(location);
         if (distance < ODENSE.distanceTo(location)){
             return BRANCH_COPENHAGEN;

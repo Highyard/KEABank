@@ -53,4 +53,5 @@
     <string name="pension_account">Pension Account:</string>
     <string name="savings_account">Savings Account:</string>
     <string name="balance">Balance:</string>
+    <string name="init">init() called</string>
 </resources>

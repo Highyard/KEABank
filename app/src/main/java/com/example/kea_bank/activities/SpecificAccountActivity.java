@@ -4,28 +4,31 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kea_bank.R;
-import com.example.kea_bank.domain.accounts.TestAccount;
 import com.example.kea_bank.domain.users.User;
 
 public class SpecificAccountActivity extends AppCompatActivity {
+
+    private final static String TAG = "SpecificAccountActivity";
 
     TextView tvSpecificAccount, tvBalance;
     Button sendMoney, depositMoney, payBills;
 
     Intent receivedIntent;
     User user;
-    //TestAccount testAccount;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_specific_account);
+        Log.d(TAG, getResources().getString(R.string.on_create));
         init();
 
         receivedIntent = getIntent();
@@ -36,6 +39,7 @@ public class SpecificAccountActivity extends AppCompatActivity {
     }
 
     protected void init(){
+        Log.d(TAG, getResources().getString(R.string.init));
         tvSpecificAccount = findViewById(R.id.tvSpecificAccount);
         tvBalance = findViewById(R.id.tvBalance);
         sendMoney = findViewById(R.id.sendMoney);
@@ -45,6 +49,7 @@ public class SpecificAccountActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     protected void setTextViews(int code){
+        Log.d(TAG, "setTextViews() called");
 
         switch (code){
 
@@ -79,7 +84,7 @@ public class SpecificAccountActivity extends AppCompatActivity {
                 break;
 
             default:
-                Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Something went wrong.", Toast.LENGTH_SHORT).show();
                 SpecificAccountActivity.this.finish();
 
         }
@@ -87,10 +92,12 @@ public class SpecificAccountActivity extends AppCompatActivity {
     }
 
     public void onClick(View view){
+        Log.d(TAG, getResources().getString(R.string.onClick));
 
         switch (view.getId()){
 
             case R.id.sendMoney:
+
                 break;
             case R.id.depositMoney:
                 break;

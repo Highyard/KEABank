@@ -11,7 +11,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -23,27 +22,14 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.kea_bank.R;
-import com.example.kea_bank.domain.Credentials.Credentials;
-import com.example.kea_bank.domain.accounts.BudgetAccount;
-import com.example.kea_bank.domain.accounts.BusinessAccount;
-import com.example.kea_bank.domain.accounts.DefaultAccount;
-import com.example.kea_bank.domain.accounts.PensionAccount;
-import com.example.kea_bank.domain.accounts.SavingsAccount;
 import com.example.kea_bank.domain.users.User;
 import com.example.kea_bank.services.LatLongService;
 import com.example.kea_bank.services.UserService;
 import com.example.kea_bank.utilities.EmailValidator;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 public class CreateUserActivity extends AppCompatActivity {
 

@@ -10,70 +10,59 @@
 
 
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context=".activities.MainActivity"
-    android:orientation="vertical"
-    android:background="@color/color_soft_beige">
-
-    <EditText
-        android:id="@+id/email"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginRight="40dp"
-        android:ems="10"
-        android:hint="@string/email"
-        android:inputType="textEmailAddress" />
+        tools:context=".activities.MainActivity"
+        android:orientation="vertical"
+        android:background="@color/color_soft_beige">
 
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="40dp"
-        android:ems="10"
-        android:hint="@string/password"
-        android:inputType="textWebPassword" />
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="80dp"
+            android:layout_marginRight="40dp"
+            android:ems="10"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress" />
 
-    <Button
-        android:id="@+id/log_in"
-        style="@style/Widget.AppCompat.Button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="40dp"
-        android:ems="10"
-        android:onClick="onClick"
-        android:background="@drawable/rounded_corner"
-        android:text="@string/log_in" />
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            android:ems="10"
+            android:hint="@string/password"
+            android:inputType="textWebPassword" />
 
-    <Button
-        android:id="@+id/sign_up"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="40dp"
-        android:onClick="onClick"
-        android:background="@drawable/rounded_corner"
-        android:text="@string/sign_up" />
+        <Button
+            android:id="@+id/log_in"
+            style="@style/Widget.AppCompat.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            android:ems="10"
+            android:onClick="onClick"
+            android:background="@drawable/rounded_corner"
+            android:text="@string/log_in" />
 
-    <Button
-        android:id="@+id/reset_password"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="40dp"
-        android:onClick="onClick"
-        android:background="@drawable/rounded_corner"
-        android:text="@string/reset_password" />
+        <Button
+            android:id="@+id/sign_up"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="40dp"
+            android:onClick="onClick"
+            android:background="@drawable/rounded_corner"
+            android:text="@string/sign_up" />
 
-</LinearLayout>
+    </LinearLayout>
 
 </ScrollView>

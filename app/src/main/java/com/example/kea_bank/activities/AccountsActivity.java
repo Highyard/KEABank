@@ -17,6 +17,7 @@ import com.example.kea_bank.domain.users.User;
 import com.example.kea_bank.services.UserService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class AccountsActivity extends AppCompatActivity {
 
@@ -58,7 +59,7 @@ public class AccountsActivity extends AppCompatActivity {
         // getAccountNames takes an ArrayList as the only argument, which is retrieved from the user object //
         // with the fetchUserAccounts method //
         accountArray = userService.getAccountNames(userService.fetchUserAccounts(user));
-
+        Collections.reverse(accountArray);
         // Instantiating adapter //
         ArrayAdapter<String> adapter = new ArrayAdapter<>(AccountsActivity.this, android.R.layout.simple_list_item_1, accountArray);
 

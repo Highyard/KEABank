@@ -1,6 +1,7 @@
 package com.example.kea_bank.activities;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.kea_bank.R;
 import com.example.kea_bank.domain.users.User;
+import com.example.kea_bank.utilities.NemIDDialogInflater;
 
 public class SpecificAccountActivity extends AppCompatActivity {
 
@@ -21,8 +23,7 @@ public class SpecificAccountActivity extends AppCompatActivity {
     Button sendMoney, depositMoney, payBills;
 
     Intent receivedIntent;
-    User user;
-
+    public User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,20 +67,22 @@ public class SpecificAccountActivity extends AppCompatActivity {
 
             case AccountsActivity.BUSI:
                 tvSpecificAccount.setText(getResources().getString(R.string.business_account) + " " + user.getCredentials().getName());
-                tvBalance.setText(String.valueOf(user.getDefaultAccount().getBalance()));
+                tvBalance.setText(String.valueOf(user.getBusinessAccount().getBalance()));
                 payBills.setVisibility(View.GONE);
                 break;
 
             case AccountsActivity.PEN:
                 tvSpecificAccount.setText(getResources().getString(R.string.pension_account) + " " + user.getCredentials().getName());
-                tvBalance.setText(String.valueOf(user.getDefaultAccount().getBalance()));
-                sendMoney.setVisibility(View.GONE);
+                tvBalance.setText(String.valueOf(user.getPensionAccount().getBalance()));
+                if (user.getAge() < 77) {
+                    sendMoney.setVisibility(View.GONE);
+                }
                 payBills.setVisibility(View.GONE);
                 break;
 
             case AccountsActivity.SAV:
                 tvSpecificAccount.setText(getResources().getString(R.string.savings_account) + " " + user.getCredentials().getName());
-                tvBalance.setText(String.valueOf(user.getDefaultAccount().getBalance()));
+                tvBalance.setText(String.valueOf(user.getSavingsAccount().getBalance()));
                 payBills.setVisibility(View.GONE);
                 break;
 
@@ -97,18 +100,23 @@ public class SpecificAccountActivity extends AppCompatActivity {
         switch (view.getId()){
 
             case R.id.sendMoney:
-
+                nemIDInflater();
                 break;
             case R.id.depositMoney:
+                nemIDInflater();
                 break;
             case R.id.payBills:
+                nemIDInflater();
                 break;
 
         }
 
     }
 
-    public void sendMoneyInflater(){
-
+    public void nemIDInflater(){
+        NemIDDialogInflater nemIDDialogInflater = new NemIDDialogInflater();
+        nemIDDialogInflater.instantiateUser(user);
+        nemIDDialogInflater.setActivityCode(NemIDDialogInflater.SPECIFIC_ACCOUNT_ACTIVITY_CODE);
+        nemIDDialogInflater.show(getSupportFragmentManager(), "nemIDDialogInflater");
     }
 }

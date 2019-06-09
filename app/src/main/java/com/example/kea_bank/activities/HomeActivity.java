@@ -15,7 +15,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private final static String TAG = "HomeActivity";
 
-    Button newsFeed, myAccounts, applyAccounts, bills;
+    Button newsFeed, myAccounts, applyAccounts, bills, resetPassword;
     User user;
     Intent receivedIntent;
 
@@ -40,8 +40,10 @@ public class HomeActivity extends AppCompatActivity {
 
         Intent newsIntent = new Intent(this, NewsFeedActivity.class);
         Intent myAccountsIntent = new Intent(this, AccountsActivity.class);
-        Intent applyIntent = new Intent(this, NewsFeedActivity.class);
+        Intent applyIntent = new Intent(this, ApplyAccountActivity.class);
         Intent billsIntent = new Intent(this, NewsFeedActivity.class);
+        Intent resetPasswordIntent = new Intent(this, ResetPasswordActivity.class);
+
 
         switch (view.getId()){
 
@@ -50,15 +52,20 @@ public class HomeActivity extends AppCompatActivity {
                 startActivity(myAccountsIntent);
                 break;
             case R.id.applyAccounts:
+                applyIntent.putExtra(getResources().getString(R.string.existing_user), user);
                 startActivity(applyIntent);
                 break;
             case R.id.bills:
+                billsIntent.putExtra(getResources().getString(R.string.existing_user), user);
                 startActivity(billsIntent);
                 break;
             case R.id.newsFeedButton:
                 startActivity(newsIntent);
                 break;
-
+            case R.id.resetPasswordButton:
+                resetPasswordIntent.putExtra(getResources().getString(R.string.existing_user), user);
+                startActivity(resetPasswordIntent);
+                break;
         }
     }
 
@@ -67,5 +74,6 @@ public class HomeActivity extends AppCompatActivity {
         myAccounts = findViewById(R.id.myAccounts);
         applyAccounts = findViewById(R.id.applyAccounts);
         bills = findViewById(R.id.bills);
+        resetPassword = findViewById(R.id.resetPasswordButton);
     }
 }

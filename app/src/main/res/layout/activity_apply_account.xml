@@ -1,9 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.ApplyAccountActivity">
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    tools:context=".activities.ApplyAccountActivity" >
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="30dp"
+        android:text="Apply for one of these  account types:"
+        android:textColor="@color/color_soft_beige"
+        android:textSize="20dp" />
+
+    <Button
+        android:id="@+id/businessAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/rounded_corner"
+        android:ems="10"
+        android:onClick="onClick"
+        android:text="BUSINESS ACCOUNT" />
+
+    <Button
+        android:id="@+id/pensionAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/rounded_corner"
+        android:onClick="onClick"
+        android:text="PENSION ACCOUNT" />
+
+    <Button
+        android:id="@+id/savingsAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/rounded_corner"
+        android:onClick="onClick"
+        android:text="SAVINGS ACCOUNT" />
+
+
+</LinearLayout>

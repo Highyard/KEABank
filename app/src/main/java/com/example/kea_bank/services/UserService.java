@@ -117,9 +117,9 @@ public class UserService {
     public ArrayList<Account> fetchUserAccounts(User user){
         Log.d(TAG, "fetchUserAccounts() called");
         ArrayList<Account> initialArrayList = new ArrayList<>();
+        initialArrayList.add(user.getDefaultAccount());
         initialArrayList.add(user.getBudgetAccount());
         initialArrayList.add(user.getBusinessAccount());
-        initialArrayList.add(user.getDefaultAccount());
         initialArrayList.add(user.getPensionAccount());
         initialArrayList.add(user.getSavingsAccount());
 

@@ -7,8 +7,8 @@ public class KeyGenerator {
     // Taken from https://dzone.com/articles/generate-random-alpha-numeric //
     private static final String ALPHA_NUMERIC_STRING = "0123456789";
     private static ArrayList<String> credArray = new ArrayList<>();
-    private static final int keyLength = 3;
-    public static final int keySize = 50;
+    private static final int KEY_LENGTH = 3;
+    public static final int KEY_SIZE = 50;
 
     private static String randomAlphaNumeric(int count) {
 
@@ -25,8 +25,8 @@ public class KeyGenerator {
 
 
     public static ArrayList<String> keyArray() {
-        for (int i = 0; i < keySize; i++) {
-            credArray.add(KeyGenerator.randomAlphaNumeric(keyLength)+ ":" + KeyGenerator.randomAlphaNumeric(keyLength));
+        for (int i = 0; i < KEY_SIZE; i++) {
+            credArray.add(KeyGenerator.randomAlphaNumeric(KEY_LENGTH)+ ":" + KeyGenerator.randomAlphaNumeric(KEY_LENGTH));
         }
         return credArray;
     }

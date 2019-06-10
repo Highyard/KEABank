@@ -43,8 +43,7 @@ public class ApplyAccountActivity extends AppCompatActivity {
         Log.d(TAG, getResources().getString(R.string.on_create));
         init();
         initNonViews();
-        receivedIntent = getIntent();
-        user = receivedIntent.getParcelableExtra(getResources().getString(R.string.existing_user));
+        instantiateUser();
 
         tv.setText("Hello " + user.getCredentials().getName());
         displayDeactivatedAccounts(user);
@@ -115,5 +114,13 @@ public class ApplyAccountActivity extends AppCompatActivity {
     private void updateUserApplication(User user){
         userService.saveUser(context, sharedPreferences, user);
         updatedUser.putExtra(getResources().getString(R.string.existing_user), user);
+    }
+
+    protected void instantiateUser() {
+        receivedIntent = getIntent();
+        user = receivedIntent.getParcelableExtra(getResources().getString(R.string.existing_user));
+        String username = user.getCredentials().getName();
+        user = userService.fetchUser(username);
+
     }
 }

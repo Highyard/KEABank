@@ -54,4 +54,6 @@
     <string name="savings_account">Savings Account:</string>
     <string name="balance">Balance:</string>
     <string name="init">init() called</string>
+    <string name="outstanding_bills">Outstanding Bills</string>
+    <string name="add_bill">Add Bill</string>
 </resources>

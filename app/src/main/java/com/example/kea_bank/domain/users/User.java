@@ -3,6 +3,7 @@ package com.example.kea_bank.domain.users;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.kea_bank.domain.Bills.Bill;
 import com.example.kea_bank.domain.Credentials.Credentials;
 import com.example.kea_bank.domain.accounts.BudgetAccount;
 import com.example.kea_bank.domain.accounts.BusinessAccount;
@@ -25,11 +26,13 @@ public class User implements Parcelable {
     private PensionAccount pensionAccount   = new PensionAccount(0.0);
     private SavingsAccount savingsAccount   = new SavingsAccount(0.0);
     private ArrayList<String> keys          = KeyGenerator.keyArray();
+    private ArrayList<Bill> bills                 = new ArrayList<>();
+
 
     public User() {
     }
 
-    public User(Integer age, String branch, Credentials credentials, DefaultAccount defaultAccount, BudgetAccount budgetAccount, BusinessAccount businessAccount, PensionAccount pensionAccount, SavingsAccount savingsAccount) {
+    public User(Integer age, String branch, Credentials credentials, DefaultAccount defaultAccount, BudgetAccount budgetAccount, BusinessAccount businessAccount, PensionAccount pensionAccount, SavingsAccount savingsAccount, ArrayList<Bill> bills) {
         this.age = age;
         this.branch = branch;
         this.credentials = credentials;
@@ -38,6 +41,7 @@ public class User implements Parcelable {
         this.businessAccount = businessAccount;
         this.pensionAccount = pensionAccount;
         this.savingsAccount = savingsAccount;
+        this.bills = bills;
     }
 
     protected User(Parcel in) {
@@ -46,14 +50,14 @@ public class User implements Parcelable {
         } else {
             age = in.readInt();
         }
-        branch = in.readString();
-        credentials = in.readParcelable(Credentials.class.getClassLoader());
-        defaultAccount = in.readParcelable(DefaultAccount.class.getClassLoader());
-        budgetAccount = in.readParcelable(BudgetAccount.class.getClassLoader());
+        branch          = in.readString();
+        credentials     = in.readParcelable(Credentials.class.getClassLoader());
+        defaultAccount  = in.readParcelable(DefaultAccount.class.getClassLoader());
+        budgetAccount   = in.readParcelable(BudgetAccount.class.getClassLoader());
         businessAccount = in.readParcelable(BusinessAccount.class.getClassLoader());
-        pensionAccount = in.readParcelable(PensionAccount.class.getClassLoader());
-        savingsAccount = in.readParcelable(SavingsAccount.class.getClassLoader());
-
+        pensionAccount  = in.readParcelable(PensionAccount.class.getClassLoader());
+        savingsAccount  = in.readParcelable(SavingsAccount.class.getClassLoader());
+        bills           = in.readArrayList(Bill.class.getClassLoader());
     }
 
     @Override
@@ -71,6 +75,7 @@ public class User implements Parcelable {
         dest.writeParcelable(businessAccount, flags);
         dest.writeParcelable(pensionAccount, flags);
         dest.writeParcelable(savingsAccount, flags);
+        dest.writeList(bills);
     }
 
     @Override
@@ -160,5 +165,13 @@ public class User implements Parcelable {
 
     public void setKeys(ArrayList<String> keys) {
         this.keys = keys;
+    }
+
+    public ArrayList<Bill> getBills() {
+        return bills;
+    }
+
+    public void setBills(ArrayList<Bill> bills) {
+        this.bills = bills;
     }
 }

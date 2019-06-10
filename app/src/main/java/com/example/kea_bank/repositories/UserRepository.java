@@ -5,9 +5,12 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.kea_bank.R;
+import com.example.kea_bank.domain.Bills.Bill;
 import com.example.kea_bank.domain.Credentials.Credentials;
 import com.example.kea_bank.domain.users.User;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
 
 public class UserRepository {
 
@@ -40,7 +43,7 @@ public class UserRepository {
             return gson.fromJson(fetchedUserName, User.class);
         } else {
             Credentials credentials = new Credentials("", "");
-            return new User(0, "", credentials, null, null, null, null, null);
+            return new User(0, "", credentials, null, null, null, null, null, new ArrayList<Bill>());
         }
     }
 

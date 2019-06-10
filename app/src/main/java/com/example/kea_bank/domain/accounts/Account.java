@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import com.example.kea_bank.domain.users.User;
 
-public abstract class Account implements Interest, Parcelable {
+public abstract class Account implements Parcelable {
 
     boolean activated   = false;
     Double balance      = null;
@@ -35,7 +35,7 @@ public abstract class Account implements Interest, Parcelable {
         this.userId = userId;
     }
 
-    void move(User sender, User receiver, Double amount) {
+    public void move(User sender, String receiver, Double amount) {
 
     }
 

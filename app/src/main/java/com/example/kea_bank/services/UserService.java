@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.kea_bank.R;
+import com.example.kea_bank.domain.Bills.Bill;
 import com.example.kea_bank.domain.Credentials.Credentials;
 import com.example.kea_bank.domain.accounts.Account;
 import com.example.kea_bank.domain.accounts.BudgetAccount;
@@ -81,11 +82,13 @@ public class UserService {
         BusinessAccount businessAccount = new BusinessAccount(0.0);
         PensionAccount pensionAccount = new PensionAccount(0.0);
         SavingsAccount savingsAccount = new SavingsAccount(0.0);
+        ArrayList<Bill> arrayList = new ArrayList<>();
         user.setDefaultAccount(defaultAccount);
         user.setBudgetAccount(budgetAccount);
         user.setBusinessAccount(businessAccount);
         user.setPensionAccount(pensionAccount);
         user.setSavingsAccount(savingsAccount);
+        user.setBills(arrayList);
     }
 
     public int calculateUserAge(String unformattedBirthdate) {

@@ -1,6 +1,8 @@
 package com.example.kea_bank.activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.widget.Button;
 
 import com.example.kea_bank.R;
 import com.example.kea_bank.domain.users.User;
+import com.example.kea_bank.services.UserService;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -19,21 +22,24 @@ public class HomeActivity extends AppCompatActivity {
     User user;
     Intent receivedIntent;
 
+    Context context;
+    SharedPreferences sharedPreferences;
+    UserService userService;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         Log.d(TAG, getResources().getString(R.string.on_create));
         init();
+        initNonViews();
+        instantiateUser();
         try {
 
-            receivedIntent = getIntent();
-            user = receivedIntent.getParcelableExtra(getResources().getString(R.string.existing_user));
 
         } catch (NullPointerException e) {
             Log.e(TAG, "onCreate: " + e.getMessage());
         }
-
     }
 
     public void onClick(View view) {
@@ -41,7 +47,7 @@ public class HomeActivity extends AppCompatActivity {
         Intent newsIntent = new Intent(this, NewsFeedActivity.class);
         Intent myAccountsIntent = new Intent(this, AccountsActivity.class);
         Intent applyIntent = new Intent(this, ApplyAccountActivity.class);
-        Intent billsIntent = new Intent(this, NewsFeedActivity.class);
+        Intent billsIntent = new Intent(this, BillsActivity.class);
         Intent resetPasswordIntent = new Intent(this, ResetPasswordActivity.class);
 
 
@@ -69,11 +75,27 @@ public class HomeActivity extends AppCompatActivity {
         }
     }
 
+
+
     protected void init(){
         newsFeed = findViewById(R.id.newsFeedButton);
         myAccounts = findViewById(R.id.myAccounts);
         applyAccounts = findViewById(R.id.applyAccounts);
         bills = findViewById(R.id.bills);
         resetPassword = findViewById(R.id.resetPasswordButton);
+    }
+
+    protected void instantiateUser() {
+        receivedIntent = getIntent();
+        user = receivedIntent.getParcelableExtra(getResources().getString(R.string.existing_user));
+        String username = user.getCredentials().getName();
+        user = userService.fetchUser(username);
+
+    }
+
+    protected void initNonViews(){
+        context = getApplicationContext();
+        sharedPreferences = context.getSharedPreferences(getResources().getString(R.string.CREDENTIALS_KEY), MODE_PRIVATE);
+        userService = new UserService(context, sharedPreferences);
     }
 }

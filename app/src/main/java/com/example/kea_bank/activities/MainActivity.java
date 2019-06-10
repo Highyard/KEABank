@@ -17,7 +17,6 @@ import com.example.kea_bank.domain.users.User;
 import com.example.kea_bank.services.LoginHandlerService;
 import com.example.kea_bank.services.UserService;
 import com.example.kea_bank.utilities.NemIDDialogInflater;
-//import com.example.kea_bank.utilities.NemIDDialogInflater;
 
 
 public class MainActivity extends AppCompatActivity {

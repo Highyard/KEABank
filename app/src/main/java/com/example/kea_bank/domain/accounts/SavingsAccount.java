@@ -33,15 +33,6 @@ public class SavingsAccount extends Account implements Parcelable {
         }
     };
 
-    @Override
-    public void increment(User userAccount) {
-
-    }
-
-    @Override
-    public void send(User sender, User receiver, Double amount) {
-
-    }
 
     @Override
     public int describeContents() {

@@ -55,12 +55,13 @@ public class ResetPasswordActivity extends AppCompatActivity {
 
     public void onClick(View view) {
         Log.d(TAG, getResources().getString(R.string.onClick));
-
+        Log.d(TAG, "USER PASS: " + user.getCredentials().getPassword());
+        Log.d(TAG, "OLD PASS: " + oldPassword.getText().toString());
         if (!oldPassword.getText().toString().equalsIgnoreCase(user.getCredentials().getPassword())){
             oldPassword.setError("Old password is incorrect.");
         }
 
-        if (!userService.passwordMatch(newPassword1.getText().toString(), newPassword2.getText().toString())){
+        else if (!userService.passwordMatch(newPassword1.getText().toString(), newPassword2.getText().toString())){
             newPassword1.setError("Passwords do not match.");
             newPassword2.setError("Passwords do not match.");
         }

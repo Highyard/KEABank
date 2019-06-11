@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.kea_bank.R;
 import com.example.kea_bank.domain.users.User;
@@ -26,6 +28,8 @@ public class HomeActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     UserService userService;
 
+    private final int customRequestCode = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,12 +38,12 @@ public class HomeActivity extends AppCompatActivity {
         init();
         initNonViews();
         instantiateUser();
-        try {
 
-
-        } catch (NullPointerException e) {
-            Log.e(TAG, "onCreate: " + e.getMessage());
+        if (user.isAutoPay()){
+            userService.autoPayAllBills(user);
         }
+
+        Log.d(TAG, "USER AUTO PAY: "+ user.isAutoPay());
     }
 
     public void onClick(View view) {
@@ -63,7 +67,7 @@ public class HomeActivity extends AppCompatActivity {
                 break;
             case R.id.bills:
                 billsIntent.putExtra(getResources().getString(R.string.existing_user), user);
-                startActivity(billsIntent);
+                startActivityForResult(billsIntent, 100);
                 break;
             case R.id.newsFeedButton:
                 startActivity(newsIntent);
@@ -98,4 +102,46 @@ public class HomeActivity extends AppCompatActivity {
         sharedPreferences = context.getSharedPreferences(getResources().getString(R.string.CREDENTIALS_KEY), MODE_PRIVATE);
         userService = new UserService(context, sharedPreferences);
     }
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (user.isAutoPay()){
+            userService.autoPayAllBills(user);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "DATA: " + data);
+
+        Log.d(TAG, getResources().getString(R.string.on_activity_result));
+
+        Log.d(TAG, "Request code" + requestCode + "// ResultCode" + resultCode);
+        try {
+            if (requestCode == customRequestCode){
+                Log.d(TAG, "" + resultCode);
+                if (resultCode == RESULT_OK) {
+                    user = data.getParcelableExtra(getResources().getString(R.string.existing_user));
+                    userService.saveUser(context, sharedPreferences, user);
+                }
+
+                if (resultCode == RESULT_CANCELED){
+                    user = data.getParcelableExtra(getResources().getString(R.string.existing_user));
+                    userService.saveUser(context, sharedPreferences, user);
+                }
+            }
+
+
+        } catch (NullPointerException e){
+            Log.e(TAG, "onActivityResult: The Intent data object came back null: Error ->", e);
+            Toast.makeText(this, "Something went wrong.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+
 }

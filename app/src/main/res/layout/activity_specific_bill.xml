@@ -1,34 +1,68 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:weightSum="100"
-    android:layout_marginTop="40dp">
+    android:orientation="vertical"
+    android:background="@color/colorPrimary"
+    android:weightSum="100">
 
     <TextView
-        android:id="@+id/textView1"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_weight="66.6"
-        android:gravity="center"
-        android:text="TextView1"
-        android:textAlignment="center" />
+        android:id="@+id/textView3"
+        android:layout_width="370dp"
+        android:layout_height="66dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:textAlignment="center"
+        android:text="Outstanding Bill"
+        android:textSize="30sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="33.3"
-        android:orientation="vertical"
-        android:paddingTop="15dp">
+        android:layout_width="411dp"
+        android:layout_height="109dp"
+        android:layout_marginTop="25dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3">
 
         <TextView
-            android:id="@+id/textView2"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:gravity="center"
-            android:text="TextView2"
-            android:textAlignment="center" />
+            android:id="@+id/billName"
+            android:layout_width="140dp"
+            android:layout_height="43dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="64dp"
+            android:text="TextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/billAmount"
+            android:layout_width="140dp"
+            android:layout_height="43dp"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="64dp"
+            android:text="TextView"
+            app:layout_constraintStart_toEndOf="@+id/billName"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </LinearLayout>
 
+
+    <Button
+        android:id="@+id/payMan"
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:background="@drawable/rounded_corner"
+        android:onClick="onClick"
+        android:text="Pay Manually"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="250dp" />
+
+
 </LinearLayout>
+

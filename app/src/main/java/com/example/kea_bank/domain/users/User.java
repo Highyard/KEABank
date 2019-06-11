@@ -26,13 +26,14 @@ public class User implements Parcelable {
     private PensionAccount pensionAccount   = new PensionAccount(0.0);
     private SavingsAccount savingsAccount   = new SavingsAccount(0.0);
     private ArrayList<String> keys          = KeyGenerator.keyArray();
-    private ArrayList<Bill> bills                 = new ArrayList<>();
+    private ArrayList<Bill> bills           = new ArrayList<>();
+    private boolean autoPay                 = false;
 
 
     public User() {
     }
 
-    public User(Integer age, String branch, Credentials credentials, DefaultAccount defaultAccount, BudgetAccount budgetAccount, BusinessAccount businessAccount, PensionAccount pensionAccount, SavingsAccount savingsAccount, ArrayList<Bill> bills) {
+    public User(Integer age, String branch, Credentials credentials, DefaultAccount defaultAccount, BudgetAccount budgetAccount, BusinessAccount businessAccount, PensionAccount pensionAccount, SavingsAccount savingsAccount, ArrayList<Bill> bills, boolean autoPay) {
         this.age = age;
         this.branch = branch;
         this.credentials = credentials;
@@ -42,6 +43,8 @@ public class User implements Parcelable {
         this.pensionAccount = pensionAccount;
         this.savingsAccount = savingsAccount;
         this.bills = bills;
+        this.autoPay = autoPay;
+
     }
 
     protected User(Parcel in) {
@@ -58,6 +61,7 @@ public class User implements Parcelable {
         pensionAccount  = in.readParcelable(PensionAccount.class.getClassLoader());
         savingsAccount  = in.readParcelable(SavingsAccount.class.getClassLoader());
         bills           = in.readArrayList(Bill.class.getClassLoader());
+        autoPay         = in.readByte() != 0;
     }
 
     @Override
@@ -76,6 +80,7 @@ public class User implements Parcelable {
         dest.writeParcelable(pensionAccount, flags);
         dest.writeParcelable(savingsAccount, flags);
         dest.writeList(bills);
+        dest.writeByte((byte) (autoPay ? 1 : 0));
     }
 
     @Override
@@ -173,5 +178,13 @@ public class User implements Parcelable {
 
     public void setBills(ArrayList<Bill> bills) {
         this.bills = bills;
+    }
+
+    public boolean isAutoPay() {
+        return autoPay;
+    }
+
+    public void setAutoPay(boolean autoPay) {
+        this.autoPay = autoPay;
     }
 }

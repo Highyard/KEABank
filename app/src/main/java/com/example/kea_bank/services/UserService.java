@@ -89,6 +89,7 @@ public class UserService {
         user.setPensionAccount(pensionAccount);
         user.setSavingsAccount(savingsAccount);
         user.setBills(arrayList);
+        user.setAutoPay(false);
     }
 
     public int calculateUserAge(String unformattedBirthdate) {
@@ -143,5 +144,35 @@ public class UserService {
         }
         Collections.reverse(accountNames);
         return accountNames;
+    }
+
+    public boolean checkAndPayBill(User user, Bill bill){
+        for (Bill userBill: user.getBills()) {
+            if (userBill.getSender().equalsIgnoreCase(bill.getSender())){
+                if (userBill.getAmount().equals(bill.getAmount())){
+                    user.getDefaultAccount().setBalance(user.getDefaultAccount().getBalance() - bill.getAmount());
+                    user.getBills().remove(userBill);
+                    return true;
+                }
+            } else {
+                Log.d(TAG, "checkAndPayBill: bill not in userBill array");
+            }
+        }
+        return false;
+    }
+
+    public void autoPayAllBills(User user){
+        ArrayList<Bill> tempArrayList = new ArrayList<>(user.getBills());
+        Log.d(TAG, "USERBILL : " + user.getBills().size());
+        Log.d(TAG, "USER AUTO PAY BOOL: "+ user.isAutoPay());
+        if (user.isAutoPay()){
+            for (Bill bill: tempArrayList) {
+                user.getDefaultAccount().setBalance(user.getDefaultAccount().getBalance() - bill.getAmount());
+                user.getBills().remove(bill);
+            }
+        }
+        Log.d(TAG, "USERBILL : " + user.getBills().size());
+        Log.d(TAG, "TEMPARRAYLIST: " + tempArrayList.size());
+        this.saveUser(context, sharedPreferences, user);
     }
 }

@@ -34,6 +34,7 @@ public class AccountsActivity extends AppCompatActivity {
     ListView accounts;
     TextView tvAccounts;
     ArrayList<String> accountArray;
+
     Context context;
     SharedPreferences sharedPreferences;
     UserService userService;
@@ -49,10 +50,7 @@ public class AccountsActivity extends AppCompatActivity {
         Log.d(TAG, getResources().getString(R.string.on_create));
         init();
         initNonViews();
-
-
-        receivedIntent = getIntent();
-        user = receivedIntent.getParcelableExtra(getResources().getString(R.string.existing_user));
+        instantiateUser();
 
         // Assigns the account names of the users accounts that are active to ArrayList accountArray. //
         // These are used to list all the current accounts that are active for logged in user. //
@@ -126,6 +124,14 @@ public class AccountsActivity extends AppCompatActivity {
         context = getApplicationContext();
         sharedPreferences = context.getSharedPreferences(getResources().getString(R.string.CREDENTIALS_KEY), MODE_PRIVATE);
         userService = new UserService(this, sharedPreferences);
+    }
+
+    protected void instantiateUser() {
+        receivedIntent = getIntent();
+        user = receivedIntent.getParcelableExtra(getResources().getString(R.string.existing_user));
+        String username = user.getCredentials().getName();
+        user = userService.fetchUser(username);
+
     }
 
 }

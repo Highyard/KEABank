@@ -43,7 +43,7 @@ public class UserRepository {
             return gson.fromJson(fetchedUserName, User.class);
         } else {
             Credentials credentials = new Credentials("", "");
-            return new User(0, "", credentials, null, null, null, null, null, new ArrayList<Bill>());
+            return new User(0, "", credentials, null, null, null, null, null, new ArrayList<Bill>(), false);
         }
     }
 

@@ -62,8 +62,7 @@ public class NemIDDialogInflater extends DialogFragment {
 
         final Random random = new Random();
         final int randomIndex = random.nextInt(KeyGenerator.KEY_SIZE);
-        Log.d(TAG, "THIS IS CONTEXT: " + context);
-        Log.d(TAG, "THIS IS USER: " + user);
+
         final String[] keyArray = user.getKeys().get(randomIndex).split(":");
         Log.d(TAG, "This is the fetched key pair: " + Arrays.toString(keyArray));
 
@@ -75,7 +74,7 @@ public class NemIDDialogInflater extends DialogFragment {
             @Override
             public void onClick(View v) {
                 try {
-                    if (activityCode == 0){
+                    if (activityCode == MAIN_ACTIVITY_CODE){
                         if (userService.verifyKeyMatch(keyArray, nemIdInput.getText().toString().trim())) {
                             loginIntent.putExtra(getResources().getString(R.string.existing_user), user);
                             startActivity(loginIntent);
@@ -85,7 +84,7 @@ public class NemIDDialogInflater extends DialogFragment {
                         }
                     }
 
-                    else if (activityCode == 1){
+                    else if (activityCode == SPECIFIC_ACCOUNT_ACTIVITY_CODE){
                         if (userService.verifyKeyMatch(keyArray, nemIdInput.getText().toString().trim())) {
                             sendMoneyIntent.putExtra(getResources().getString(R.string.existing_user), user);
                             startActivity(sendMoneyIntent);
@@ -95,7 +94,7 @@ public class NemIDDialogInflater extends DialogFragment {
                         }
                     }
                     else if (activityCode == -1){
-                        Log.d(TAG, "Invalid activityCode. Call setActivityCode() with an activityCode from " + getActivity());
+                        Log.d(TAG, "No activityCode set. Call setActivityCode() with an activityCode from " + getActivity() +  " if you want to start an activity after confirmation");
                     }
 
                 } catch (ClassCastException e) {

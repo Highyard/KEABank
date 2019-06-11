@@ -56,4 +56,6 @@
     <string name="init">init() called</string>
     <string name="outstanding_bills">Outstanding Bills</string>
     <string name="add_bill">Add Bill</string>
+    <string name="updated_user">UPDATED_USER</string>
+    <string name="pay_automatically">Pay Automatically</string>
 </resources>

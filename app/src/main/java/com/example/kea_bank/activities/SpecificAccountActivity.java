@@ -3,6 +3,7 @@ package com.example.kea_bank.activities;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 
 import com.example.kea_bank.R;
 import com.example.kea_bank.domain.users.User;
+import com.example.kea_bank.services.UserService;
 import com.example.kea_bank.utilities.NemIDDialogInflater;
 
 public class SpecificAccountActivity extends AppCompatActivity {
@@ -23,7 +25,11 @@ public class SpecificAccountActivity extends AppCompatActivity {
     Button sendMoney, depositMoney, payBills;
 
     Intent receivedIntent;
-    public User user;
+    User user;
+
+    Context context;
+    SharedPreferences sharedPreferences;
+    UserService userService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +37,9 @@ public class SpecificAccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_specific_account);
         Log.d(TAG, getResources().getString(R.string.on_create));
         init();
+        initNonViews();
+        instantiateUser();
 
-        receivedIntent = getIntent();
-        user = receivedIntent.getParcelableExtra(getResources().getString(R.string.existing_user));
         int customCode = receivedIntent.getIntExtra("CUSTOM_CODE", -1);
         setTextViews(customCode);
 
@@ -118,5 +124,18 @@ public class SpecificAccountActivity extends AppCompatActivity {
         nemIDDialogInflater.instantiateUser(user);
         nemIDDialogInflater.setActivityCode(NemIDDialogInflater.SPECIFIC_ACCOUNT_ACTIVITY_CODE);
         nemIDDialogInflater.show(getSupportFragmentManager(), "nemIDDialogInflater");
+    }
+
+    protected void initNonViews(){
+        context = getApplicationContext();
+        sharedPreferences = context.getSharedPreferences(getResources().getString(R.string.CREDENTIALS_KEY), MODE_PRIVATE);
+        userService = new UserService(context, sharedPreferences);
+    }
+
+    protected void instantiateUser(){
+        receivedIntent = getIntent();
+        user = receivedIntent.getParcelableExtra(getResources().getString(R.string.existing_user));
+        String username = user.getCredentials().getName();
+        user = userService.fetchUser(username);
     }
 }

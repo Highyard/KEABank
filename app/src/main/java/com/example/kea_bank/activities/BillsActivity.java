@@ -27,6 +27,8 @@ public class BillsActivity extends AppCompatActivity {
 
     private static final String TAG = "BillsActivity";
 
+    public final static int CUSTOM_RESULT_CODE = 67;
+
     ListView billsList;
     TextView outstandingBills;
     Button addBill;
@@ -98,12 +100,7 @@ public class BillsActivity extends AppCompatActivity {
 
             case R.id.addBill:
                 addBills();
-
                 recreate();
-//                finish();
-//                overridePendingTransition(0, 0);
-//                startActivity(getIntent());
-//                overridePendingTransition(0, 0);
                 break;
 
             case R.id.payAutomatically:
@@ -135,7 +132,7 @@ public class BillsActivity extends AppCompatActivity {
     public void onBackPressed() {
         Intent intent = new Intent();
         intent.putExtra(getResources().getString(R.string.existing_user), user);
-        setResult(RESULT_CANCELED, intent);
+        setResult(CUSTOM_RESULT_CODE, intent);
         super.onBackPressed();
     }
 

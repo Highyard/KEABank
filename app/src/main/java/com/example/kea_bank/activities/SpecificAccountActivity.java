@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.kea_bank.R;
+import com.example.kea_bank.domain.accounts.Account;
 import com.example.kea_bank.domain.users.User;
 import com.example.kea_bank.services.UserService;
 import com.example.kea_bank.utilities.NemIDDialogInflater;
@@ -26,6 +27,7 @@ public class SpecificAccountActivity extends AppCompatActivity {
 
     Intent receivedIntent;
     User user;
+    Account currentAccount;
 
     Context context;
     SharedPreferences sharedPreferences;
@@ -63,18 +65,21 @@ public class SpecificAccountActivity extends AppCompatActivity {
             case AccountsActivity.DEF:
                 tvSpecificAccount.setText(getResources().getString(R.string.default_account) + " " + user.getCredentials().getName());
                 tvBalance.setText(getResources().getString(R.string.balance) + user.getDefaultAccount().getBalance());
+                currentAccount = user.getDefaultAccount();
                 break;
 
             case AccountsActivity.BUD:
                 tvSpecificAccount.setText(getResources().getString(R.string.budget_account) + " " + user.getCredentials().getName());
                 tvBalance.setText(getResources().getString(R.string.balance) + user.getBudgetAccount().getBalance());
                 payBills.setVisibility(View.GONE);
+                currentAccount = user.getBudgetAccount();
                 break;
 
             case AccountsActivity.BUSI:
                 tvSpecificAccount.setText(getResources().getString(R.string.business_account) + " " + user.getCredentials().getName());
                 tvBalance.setText(String.valueOf(user.getBusinessAccount().getBalance()));
                 payBills.setVisibility(View.GONE);
+                currentAccount = user.getBusinessAccount();
                 break;
 
             case AccountsActivity.PEN:
@@ -84,12 +89,14 @@ public class SpecificAccountActivity extends AppCompatActivity {
                     sendMoney.setVisibility(View.GONE);
                 }
                 payBills.setVisibility(View.GONE);
+                currentAccount = user.getPensionAccount();
                 break;
 
             case AccountsActivity.SAV:
                 tvSpecificAccount.setText(getResources().getString(R.string.savings_account) + " " + user.getCredentials().getName());
                 tvBalance.setText(String.valueOf(user.getSavingsAccount().getBalance()));
                 payBills.setVisibility(View.GONE);
+                currentAccount = user.getSavingsAccount();
                 break;
 
             default:
@@ -106,25 +113,22 @@ public class SpecificAccountActivity extends AppCompatActivity {
         switch (view.getId()){
 
             case R.id.sendMoney:
-                nemIDInflater();
+                Intent intent = new Intent(this, SendMoneyActivity.class);
+                intent.putExtra(getResources().getString(R.string.existing_user), user);
+                intent.putExtra("ACCOUNT", currentAccount);
+                startActivity(intent);
                 break;
             case R.id.depositMoney:
-                nemIDInflater();
+                Intent depositMoney = new Intent(this, DepositMoneyActivity.class);
+                startActivity(depositMoney);
                 break;
             case R.id.payBills:
-                nemIDInflater();
                 break;
 
         }
-
     }
 
-    public void nemIDInflater(){
-        NemIDDialogInflater nemIDDialogInflater = new NemIDDialogInflater();
-        nemIDDialogInflater.instantiateUser(user);
-        nemIDDialogInflater.setActivityCode(NemIDDialogInflater.SPECIFIC_ACCOUNT_ACTIVITY_CODE);
-        nemIDDialogInflater.show(getSupportFragmentManager(), "nemIDDialogInflater");
-    }
+
 
     protected void initNonViews(){
         context = getApplicationContext();

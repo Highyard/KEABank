@@ -13,7 +13,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.SpecificBillActivity"></activity>
+        <activity android:name=".activities.SomeoneElsesActivity"></activity>
+        <activity android:name=".activities.DepositMoneyActivity" />
+        <activity android:name=".activities.SendMoneyActivity" />
+        <activity android:name=".activities.SpecificBillActivity" />
         <activity android:name=".activities.ResetPasswordActivity" />
         <activity android:name=".activities.BillsActivity" />
         <activity android:name=".activities.ApplyAccountActivity" />

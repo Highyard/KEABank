@@ -23,7 +23,7 @@ public class AccountsActivity extends AppCompatActivity {
 
     private final static String TAG = "AccountsActivity";
 
-    // Codes for checking which account was tapped //
+    // Codes for checking which toAccount was tapped //
     public final static int DEF = 0;
     public final static int BUD = 1;
     public final static int BUSI = 2;
@@ -52,7 +52,7 @@ public class AccountsActivity extends AppCompatActivity {
         initNonViews();
         instantiateUser();
 
-        // Assigns the account names of the users accounts that are active to ArrayList accountArray. //
+        // Assigns the toAccount names of the users accounts that are active to ArrayList accountArray. //
         // These are used to list all the current accounts that are active for logged in user. //
         // getAccountNames takes an ArrayList as the only argument, which is retrieved from the user object //
         // with the fetchUserAccounts method //

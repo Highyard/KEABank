@@ -18,6 +18,9 @@ import android.widget.Toast;
 import com.example.kea_bank.R;
 import com.example.kea_bank.activities.ApplyAccountActivity;
 import com.example.kea_bank.activities.HomeActivity;
+import com.example.kea_bank.activities.SendMoneyActivity;
+import com.example.kea_bank.activities.SomeoneElsesActivity;
+import com.example.kea_bank.domain.accounts.Account;
 import com.example.kea_bank.domain.users.User;
 import com.example.kea_bank.services.UserService;
 
@@ -32,14 +35,18 @@ public class NemIDDialogInflater extends DialogFragment {
 
     public static final int MAIN_ACTIVITY_CODE = 0;
     public static final int SPECIFIC_ACCOUNT_ACTIVITY_CODE = 1;
+    public static final int SEND_MONEY_ACTIVITY = 2;
+
+    private int activityCode = -1;
 
     private TextView key, dCancel, dActionOk;
     private EditText nemIdInput;
 
+    private Account currentAccount;
     private User user;
     private Intent loginIntent;
     private Intent sendMoneyIntent;
-    private int activityCode = -1;
+    private Intent sendToSomeoneElse;
 
     Context context;
     SharedPreferences sharedPreferences;
@@ -57,7 +64,8 @@ public class NemIDDialogInflater extends DialogFragment {
         init();
 
         loginIntent = new Intent(context, HomeActivity.class);
-        sendMoneyIntent = new Intent(context, ApplyAccountActivity.class);
+        sendMoneyIntent = new Intent(context, SendMoneyActivity.class);
+        sendToSomeoneElse = new Intent(context, SomeoneElsesActivity.class);
 
 
         final Random random = new Random();
@@ -93,12 +101,23 @@ public class NemIDDialogInflater extends DialogFragment {
                             Toast.makeText(context, getResources().getString(R.string.invalid_key), Toast.LENGTH_SHORT).show();
                         }
                     }
+                    else if(activityCode == SEND_MONEY_ACTIVITY) {
+                        if (userService.verifyKeyMatch(keyArray, nemIdInput.getText().toString().trim())){
+                            sendToSomeoneElse.putExtra(getResources().getString(R.string.existing_user), user);
+                            sendToSomeoneElse.putExtra("ACCOUNT", currentAccount);
+                            startActivityForResult(sendToSomeoneElse, SendMoneyActivity.DIALOG_REQUEST_CODE);
+                        } else {
+                            Toast.makeText(context, getResources().getString(R.string.invalid_key), Toast.LENGTH_SHORT).show();
+                        }
+                    }
                     else if (activityCode == -1){
                         Log.d(TAG, "No activityCode set. Call setActivityCode() with an activityCode from " + getActivity() +  " if you want to start an activity after confirmation");
                     }
 
                 } catch (ClassCastException e) {
-                    Log.e(TAG, "Class context expected before initialization " + e.getMessage());
+                    Log.e(TAG, "Class context expected before initialization. ->" + e.getMessage());
+                } catch (NullPointerException e) {
+                    Log.e(TAG, "NullPointerException likely to due null Context object. ->" + e.getMessage() );
                 }
 
                 getDialog().dismiss();
@@ -129,6 +148,10 @@ public class NemIDDialogInflater extends DialogFragment {
 
     public void instantiateUser(User passedUser){
         user = passedUser;
+    }
+
+    public void instantiateCurrentAccount(Account account){
+        currentAccount = account;
     }
 
     public void setActivityCode(int code){

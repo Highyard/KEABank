@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.example.kea_bank.domain.users.User;
+import com.example.kea_bank.services.UserService;
 
 public abstract class Account implements Parcelable {
 
@@ -33,10 +34,6 @@ public abstract class Account implements Parcelable {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public void move(User sender, String receiver, Double amount) {
-
     }
 
     @Override

@@ -53,9 +53,8 @@ public class SpecificBillActivity extends AppCompatActivity {
                 if (userService.checkAndPayBill(user, customBill)) {
                     userService.saveUser(context, sharedPreferences, user);
                     Toast.makeText(context, "Bill was paid!", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_CANCELED);
                     finish();
-                } else {
-                    Toast.makeText(context, "Something went wrong.", Toast.LENGTH_SHORT).show();
                 }
                 break;
 

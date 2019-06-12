@@ -163,16 +163,27 @@ public class UserService {
 
     public void autoPayAllBills(User user){
         ArrayList<Bill> tempArrayList = new ArrayList<>(user.getBills());
-        Log.d(TAG, "USERBILL : " + user.getBills().size());
-        Log.d(TAG, "USER AUTO PAY BOOL: "+ user.isAutoPay());
         if (user.isAutoPay()){
             for (Bill bill: tempArrayList) {
                 user.getDefaultAccount().setBalance(user.getDefaultAccount().getBalance() - bill.getAmount());
                 user.getBills().remove(bill);
             }
         }
-        Log.d(TAG, "USERBILL : " + user.getBills().size());
-        Log.d(TAG, "TEMPARRAYLIST: " + tempArrayList.size());
+
+        this.saveUser(context, sharedPreferences, user);
+    }
+
+    public void sendMoneySomeoneElse(User user, Account fromAccount, User receiver, Double amount){
+        fromAccount.setBalance(fromAccount.getBalance() - amount);
+        receiver.getDefaultAccount().setBalance(receiver.getDefaultAccount().getBalance() + amount);
+        this.saveUser(context, sharedPreferences, user);
+        this.saveUser(context, sharedPreferences, receiver);
+    }
+
+    public void sendMoneyOwnAccount(User user, Account fromAccount, Account toAccount, Double amount){
+
+        fromAccount.setBalance(fromAccount.getBalance() - amount);
+        toAccount.setBalance(toAccount.getBalance() + amount);
         this.saveUser(context, sharedPreferences, user);
     }
 }

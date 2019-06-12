@@ -58,4 +58,13 @@
     <string name="add_bill">Add Bill</string>
     <string name="updated_user">UPDATED_USER</string>
     <string name="pay_automatically">Pay Automatically</string>
+    <string name="ok">OK</string>
+
+    <array name="spinner_coiches">
+        <item>DefaultAccount</item>
+        <item>BudgetAccount</item>
+        <item>BusinessAccount</item>
+        <item>PensionAccount</item>
+        <item>SavingsAccount</item>
+    </array>
 </resources>

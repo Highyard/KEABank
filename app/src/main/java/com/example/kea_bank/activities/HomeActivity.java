@@ -130,16 +130,31 @@ public class HomeActivity extends AppCompatActivity {
                     userService.saveUser(context, sharedPreferences, user);
                 }
 
-                if (resultCode == RESULT_CANCELED){
+                if (resultCode == BillsActivity.CUSTOM_RESULT_CODE){
                     user = data.getParcelableExtra(getResources().getString(R.string.existing_user));
                     userService.saveUser(context, sharedPreferences, user);
                 }
+
+                if (resultCode == 200){
+                    user = data.getParcelableExtra(getResources().getString(R.string.existing_user));
+                    userService.saveUser(context, sharedPreferences, user);
+                }
+
+                if (resultCode == 201){
+                    user = data.getParcelableExtra(getResources().getString(R.string.existing_user));
+                    userService.saveUser(context, sharedPreferences, user);
+                }
+
+                if (resultCode == RESULT_CANCELED) {
+                    // RESULT_CANCELED comes from SpecificBillActivity
+                    // Do something here in the future?
+                }
+
             }
 
 
         } catch (NullPointerException e){
-            Log.e(TAG, "onActivityResult: The Intent data object came back null: Error ->", e);
-            Toast.makeText(this, "Something went wrong.", Toast.LENGTH_LONG).show();
+            Log.e(TAG, "onActivityResult: If the intent object came back null, then a bill was paid manually. Error ->", e);
         }
     }
 

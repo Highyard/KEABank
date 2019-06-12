@@ -123,4 +123,12 @@ public class ApplyAccountActivity extends AppCompatActivity {
         user = userService.fetchUser(username);
 
     }
+
+    @Override
+    public void onBackPressed() {
+
+        setResult(HomeActivity.ACCOUNTS_APPLIED_CODE, updatedUser);
+
+        super.onBackPressed();
+    }
 }

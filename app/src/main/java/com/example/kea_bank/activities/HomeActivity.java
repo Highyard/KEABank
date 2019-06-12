@@ -30,6 +30,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private final int customRequestCode = 100;
     public final static int RESET_PASSWORD_CODE = 777;
+    public final static int ACCOUNTS_APPLIED_CODE = 888;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +141,11 @@ public class HomeActivity extends AppCompatActivity {
 
                     if (resultCode == RESET_PASSWORD_CODE){
                         user.getCredentials().setPassword(data.getStringExtra(("NEW_PASS")));
+                        userService.saveUser(context, sharedPreferences, user);
+                    }
+
+                    if (resultCode == ACCOUNTS_APPLIED_CODE){
+                        user = data.getParcelableExtra(getResources().getString(R.string.existing_user));
                         userService.saveUser(context, sharedPreferences, user);
                     }
 

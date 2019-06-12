@@ -3,7 +3,6 @@ package com.example.kea_bank.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.kea_bank.R;
 import com.example.kea_bank.domain.accounts.Account;
@@ -25,8 +23,6 @@ import com.example.kea_bank.utilities.NemIDDialogInflater;
 public class SendMoneyActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
     private static final String TAG = "SendMoneyActivity";
-
-    public static final int DIALOG_REQUEST_CODE = 333;
 
     TextView toWho, howMuch;
     Button myOwn, someoneElses, send;
@@ -104,14 +100,26 @@ public class SendMoneyActivity extends AppCompatActivity implements AdapterView.
                 break;
 
             case R.id.someoneElses:
-                nemIDDialogInflater.instantiateCurrentAccount(receivedAccount);
                 nemIDInflater();
-                finish();
+                nemIDDialogInflater.instantiateCurrentAccount(receivedAccount);
                 break;
 
             case R.id.send:
                 Double amount = Double.parseDouble(editText.getText().toString());
-                userService.sendMoneyOwnAccount(user, receivedAccount, toAccount, amount);
+
+                userService.assignInstanceOf(user, receivedAccount);
+
+                userService.assignInstanceOf(user, toAccount);
+
+                receivedAccount.setBalance(receivedAccount.getBalance() - amount);
+                toAccount.setBalance(toAccount.getBalance() + amount);
+
+                userService.saveUser(context, sharedPreferences, user);
+
+                Intent intent = new Intent(this, AccountsActivity.class);
+                intent.putExtra(getResources().getString(R.string.existing_user), user);
+                startActivity(intent);
+                finish();
                 break;
         }
 
@@ -124,12 +132,10 @@ public class SendMoneyActivity extends AppCompatActivity implements AdapterView.
         Log.d(TAG, "STRING CHOICE: " + choice);
 
         for (Account chosenAccount: userService.fetchUserAccounts(user)) {
-            if (!chosenAccount.isActivated()){
-                Toast.makeText(context, "This toAccount type has not been activated. Go to Apply for Account to activate this type.", Toast.LENGTH_LONG).show();
-            } else {
+
                 if (choice.equalsIgnoreCase(chosenAccount.getClass().getSimpleName())){
                     toAccount = chosenAccount;
-            }
+
 
             }
         }
@@ -148,11 +154,8 @@ public class SendMoneyActivity extends AppCompatActivity implements AdapterView.
         nemIDDialogInflater.show(getSupportFragmentManager(), "nemIDDialogInflater");
     }
 
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent();
-        intent.putExtra(getResources().getString(R.string.existing_user), user);
-        setResult(200, intent);
-        super.onBackPressed();
-    }
+
+
+
+
 }

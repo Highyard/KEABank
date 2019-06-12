@@ -123,35 +123,27 @@ public class HomeActivity extends AppCompatActivity {
 
         Log.d(TAG, "Request code" + requestCode + "// ResultCode" + resultCode);
         try {
-            if (requestCode == customRequestCode){
-                Log.d(TAG, "" + resultCode);
-                if (resultCode == RESULT_OK) {
-                    user = data.getParcelableExtra(getResources().getString(R.string.existing_user));
-                    userService.saveUser(context, sharedPreferences, user);
-                }
+            if (data != null) {
 
-                if (resultCode == BillsActivity.CUSTOM_RESULT_CODE){
-                    user = data.getParcelableExtra(getResources().getString(R.string.existing_user));
-                    userService.saveUser(context, sharedPreferences, user);
-                }
+                if (requestCode == customRequestCode) {
+                    Log.d(TAG, "" + resultCode);
+                    if (resultCode == RESULT_OK) {
+                        user = data.getParcelableExtra(getResources().getString(R.string.existing_user));
+                        userService.saveUser(context, sharedPreferences, user);
+                    }
 
-                if (resultCode == 200){
-                    user = data.getParcelableExtra(getResources().getString(R.string.existing_user));
-                    userService.saveUser(context, sharedPreferences, user);
-                }
+                    if (resultCode == BillsActivity.CUSTOM_RESULT_CODE) {
+                        user = data.getParcelableExtra(getResources().getString(R.string.existing_user));
+                        userService.saveUser(context, sharedPreferences, user);
+                    }
 
-                if (resultCode == 201){
-                    user = data.getParcelableExtra(getResources().getString(R.string.existing_user));
-                    userService.saveUser(context, sharedPreferences, user);
-                }
+                    if (resultCode == RESULT_CANCELED) {
+                        // RESULT_CANCELED comes from SpecificBillActivity
+                        // Do something here in the future?
+                    }
 
-                if (resultCode == RESULT_CANCELED) {
-                    // RESULT_CANCELED comes from SpecificBillActivity
-                    // Do something here in the future?
                 }
-
             }
-
 
         } catch (NullPointerException e){
             Log.e(TAG, "onActivityResult: If the intent object came back null, then a bill was paid manually. Error ->", e);

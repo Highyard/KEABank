@@ -22,6 +22,8 @@ public class SpecificAccountActivity extends AppCompatActivity {
 
     private final static String TAG = "SpecificAccountActivity";
 
+    private final static String CUSTOM_CODE_HOLDER = "";
+
     TextView tvSpecificAccount, tvBalance;
     Button sendMoney, depositMoney, payBills;
 
@@ -33,6 +35,8 @@ public class SpecificAccountActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     UserService userService;
 
+    int customCode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +46,14 @@ public class SpecificAccountActivity extends AppCompatActivity {
         initNonViews();
         instantiateUser();
 
-        int customCode = receivedIntent.getIntExtra("CUSTOM_CODE", -1);
+        customCode = receivedIntent.getIntExtra("CUSTOM_CODE", -1);
+
+        if (savedInstanceState != null){
+            Log.d(TAG, "INSTANCESTATE RAN");
+            Log.d(TAG, "INSTANCE STATE INT VALUE :" + savedInstanceState.getInt(CUSTOM_CODE_HOLDER));
+            customCode = savedInstanceState.getInt(CUSTOM_CODE_HOLDER);
+        }
+
         setTextViews(customCode);
 
     }
@@ -100,8 +111,8 @@ public class SpecificAccountActivity extends AppCompatActivity {
                 break;
 
             default:
-                Toast.makeText(this, "Something went wrong.", Toast.LENGTH_SHORT).show();
-                SpecificAccountActivity.this.finish();
+                finish();
+
 
         }
 
@@ -141,5 +152,12 @@ public class SpecificAccountActivity extends AppCompatActivity {
         user = receivedIntent.getParcelableExtra(getResources().getString(R.string.existing_user));
         String username = user.getCredentials().getName();
         user = userService.fetchUser(username);
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        outState.putInt(CUSTOM_CODE_HOLDER, customCode);
     }
 }

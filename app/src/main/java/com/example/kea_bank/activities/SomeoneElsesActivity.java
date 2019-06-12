@@ -64,11 +64,14 @@ public class SomeoneElsesActivity extends AppCompatActivity {
     }
 
     public void onClick(View view){
+        userService.assignInstanceOf(user, receivedAccount);
+
         User receiver = userService.fetchUser(etRecipient.getText().toString().trim());
         userService.sendMoneySomeoneElse(user, receivedAccount, receiver, Double.parseDouble(etAmount.getText().toString()));
-        Intent intent = new Intent();
+        Intent intent = new Intent(this, SpecificAccountActivity.class);
         intent.putExtra(getResources().getString(R.string.existing_user), user);
-        setResult(201);
+        userService.saveUser(context, sharedPreferences, user);
+        startActivity(intent);
         finish();
     }
 

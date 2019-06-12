@@ -81,6 +81,7 @@ public class NemIDDialogInflater extends DialogFragment {
         dActionOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 try {
                     if (activityCode == MAIN_ACTIVITY_CODE){
                         if (userService.verifyKeyMatch(keyArray, nemIdInput.getText().toString().trim())) {
@@ -101,11 +102,13 @@ public class NemIDDialogInflater extends DialogFragment {
                             Toast.makeText(context, getResources().getString(R.string.invalid_key), Toast.LENGTH_SHORT).show();
                         }
                     }
+
                     else if(activityCode == SEND_MONEY_ACTIVITY) {
                         if (userService.verifyKeyMatch(keyArray, nemIdInput.getText().toString().trim())){
                             sendToSomeoneElse.putExtra(getResources().getString(R.string.existing_user), user);
                             sendToSomeoneElse.putExtra("ACCOUNT", currentAccount);
-                            startActivityForResult(sendToSomeoneElse, SendMoneyActivity.DIALOG_REQUEST_CODE);
+                            startActivity(sendToSomeoneElse);
+                            getActivity().finish();
                         } else {
                             Toast.makeText(context, getResources().getString(R.string.invalid_key), Toast.LENGTH_SHORT).show();
                         }
@@ -113,6 +116,8 @@ public class NemIDDialogInflater extends DialogFragment {
                     else if (activityCode == -1){
                         Log.d(TAG, "No activityCode set. Call setActivityCode() with an activityCode from " + getActivity() +  " if you want to start an activity after confirmation");
                     }
+
+
 
                 } catch (ClassCastException e) {
                     Log.e(TAG, "Class context expected before initialization. ->" + e.getMessage());

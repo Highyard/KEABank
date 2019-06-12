@@ -176,14 +176,33 @@ public class UserService {
     public void sendMoneySomeoneElse(User user, Account fromAccount, User receiver, Double amount){
         fromAccount.setBalance(fromAccount.getBalance() - amount);
         receiver.getDefaultAccount().setBalance(receiver.getDefaultAccount().getBalance() + amount);
-        this.saveUser(context, sharedPreferences, user);
-        this.saveUser(context, sharedPreferences, receiver);
+       userRepository.saveUser(user);
+       userRepository.saveUser(receiver);
     }
 
     public void sendMoneyOwnAccount(User user, Account fromAccount, Account toAccount, Double amount){
-
-        fromAccount.setBalance(fromAccount.getBalance() - amount);
+        Log.d(TAG, "PRE AMOUNT: " + fromAccount.getBalance());
+        fromAccount.setBalance((fromAccount.getBalance()) - (amount));
+        Log.d(TAG, "POST AMOUNT: " + fromAccount.getBalance());
         toAccount.setBalance(toAccount.getBalance() + amount);
-        this.saveUser(context, sharedPreferences, user);
+        userRepository.saveUser(user);
+    }
+
+    public void assignInstanceOf(User user, Account account){
+        if (account instanceof DefaultAccount){
+            user.setDefaultAccount((DefaultAccount)account);
+        }
+        if (account instanceof BudgetAccount){
+            user.setBudgetAccount(((BudgetAccount)account));
+        }
+        if (account instanceof BusinessAccount){
+            user.setBusinessAccount((BusinessAccount)account);
+        }
+        if (account instanceof PensionAccount){
+            user.setPensionAccount((PensionAccount)account);
+        }
+        if (account instanceof SavingsAccount){
+            user.setSavingsAccount((SavingsAccount)account);
+        }
     }
 }

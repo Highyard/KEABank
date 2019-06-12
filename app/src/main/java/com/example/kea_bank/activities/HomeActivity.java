@@ -29,6 +29,7 @@ public class HomeActivity extends AppCompatActivity {
     UserService userService;
 
     private final int customRequestCode = 100;
+    public final static int RESET_PASSWORD_CODE = 777;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +75,7 @@ public class HomeActivity extends AppCompatActivity {
                 break;
             case R.id.resetPasswordButton:
                 resetPasswordIntent.putExtra(getResources().getString(R.string.existing_user), user);
-                startActivity(resetPasswordIntent);
+                startActivityForResult(resetPasswordIntent, customRequestCode);
                 break;
         }
     }
@@ -137,10 +138,11 @@ public class HomeActivity extends AppCompatActivity {
                         userService.saveUser(context, sharedPreferences, user);
                     }
 
-                    if (resultCode == RESULT_CANCELED) {
-                        // RESULT_CANCELED comes from SpecificBillActivity
-                        // Do something here in the future?
+                    if (resultCode == RESET_PASSWORD_CODE){
+                        user.getCredentials().setPassword(data.getStringExtra(("NEW_PASS")));
+                        userService.saveUser(context, sharedPreferences, user);
                     }
+
 
                 }
             }

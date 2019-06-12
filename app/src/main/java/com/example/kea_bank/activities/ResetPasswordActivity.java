@@ -68,6 +68,9 @@ public class ResetPasswordActivity extends AppCompatActivity {
         else {
             user.getCredentials().setPassword(newPassword1.getText().toString().trim());
             userService.saveUser(context, sharedPreferencesCredentials, user);
+            Intent intent = new Intent();
+            intent.putExtra("NEW_PASS", newPassword1.getText().toString());
+            setResult(HomeActivity.RESET_PASSWORD_CODE, intent);
             finish();
         }
 
